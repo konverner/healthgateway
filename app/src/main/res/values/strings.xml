@@ -11,6 +11,12 @@
   <string name="sleep_session_detail">Sleep session detail</string>
   <string name="differential_changes">Changes</string>
 
+  <!-- Exercise Types -->
+  <string name="exercise_type_running">Running</string>
+  <string name="exercise_type_cycling">Cycling</string>
+  <string name="exercise_type_walking">Walking</string>
+  <string name="exercise_type_biking">Biking</string>
+
   <!-- Welcome screen -->
   <string name="welcome_message">Welcome to Health Connect!</string>
   <string name="health_connect_logo">Health Connect logo</string>
