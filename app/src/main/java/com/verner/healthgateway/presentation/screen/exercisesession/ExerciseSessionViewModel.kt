@@ -1,6 +1,8 @@
 package com.verner.healthgateway.presentation.screen.exercisesession
 
+import android.content.Context
 import android.os.RemoteException
+import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,25 +18,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.verner.healthgateway.data.HealthConnectManager
+import io.appwrite.Client
+import io.appwrite.ID
+import io.appwrite.models.Collection
+import io.appwrite.models.Database
+import io.appwrite.services.Databases
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.time.Instant
 import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
-import io.appwrite.Client
-import io.appwrite.ID
-import io.appwrite.services.Databases
-import io.appwrite.models.Database
-import io.appwrite.models.Collection
 
 
 class ExerciseSessionViewModel(
+  private val context: Context,
   private val healthConnectManager: HealthConnectManager
   ) :
   ViewModel() {
@@ -64,7 +67,6 @@ class ExerciseSessionViewModel(
   fun initialLoad() {
     viewModelScope.launch {
       tryWithPermissionsCheck {
-        readExerciseSessions()
       }
     }
   }
@@ -80,9 +82,35 @@ class ExerciseSessionViewModel(
   fun readExerciseSessions() {
     viewModelScope.launch {
       tryWithPermissionsCheck {
-        val startOfDay = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS).minusDays(7)
-        val now = Instant.now()
-        sessionsList.value = healthConnectManager.readExerciseSessions(startOfDay.toInstant(), now)
+        val startOfDay = ZonedDateTime.now().minusYears(4)
+        val now = ZonedDateTime.now()
+        sessionsList.value = healthConnectManager.readExerciseSessions(
+          startOfDay.toInstant(), now.toInstant()
+        )
+        val countRecordsImported = sessionsList.value.count()
+
+        // Get earliest session which is date of initial app install - 30 days
+        // see: https://developer.android.com/health-and-fitness/guides/health-connect/develop/read-data#read-restriction
+        val firstInstallTime: Long = context
+          .packageManager
+          .getPackageInfo(context.getPackageName(), 0).firstInstallTime
+
+        val firstInstallDate = Date(firstInstallTime)
+        val calendar = Calendar.getInstance()
+
+        calendar.time = firstInstallDate
+        calendar.add(Calendar.DAY_OF_MONTH, -30)
+
+        val earliestSessionDate = calendar.time
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val earliestSessionDateFormatted = dateFormat.format(earliestSessionDate)
+
+        Toast.makeText(
+          context,
+          "$countRecordsImported new records imported starting from $earliestSessionDateFormatted",
+          Toast.LENGTH_LONG
+        ).show()
       }
     }
   }
@@ -132,7 +160,11 @@ class ExerciseSessionViewModel(
           }
         }
         writer.close()
-
+        Toast.makeText(
+          context,
+          "$countRecordsExported records have been exported to ${file.path}",
+          Toast.LENGTH_LONG
+        ).show()
       } catch (e: Exception) {
         e.printStackTrace()
       }
@@ -274,12 +306,14 @@ class ExerciseSessionViewModel(
 }
 
 class ExerciseSessionViewModelFactory(
+    private val context: Context,
     private val healthConnectManager: HealthConnectManager,
 ) : ViewModelProvider.Factory {
   override fun <T : ViewModel> create(modelClass: Class<T>): T {
     if (modelClass.isAssignableFrom(ExerciseSessionViewModel::class.java)) {
       @Suppress("UNCHECKED_CAST")
       return ExerciseSessionViewModel(
+        context = context,
         healthConnectManager = healthConnectManager
       ) as T
     }

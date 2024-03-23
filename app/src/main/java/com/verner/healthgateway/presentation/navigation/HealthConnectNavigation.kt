@@ -59,6 +59,7 @@ fun HealthConnectNavigation(
     composable(Screen.ExerciseSessions.route) {
       val viewModel: ExerciseSessionViewModel = viewModel(
         factory = ExerciseSessionViewModelFactory(
+          context = context,
           healthConnectManager = healthConnectManager
         )
       )
@@ -71,6 +72,7 @@ fun HealthConnectNavigation(
           onPermissionsResult()
         }
       ExerciseSessionScreen(
+        context = context,
         permissionsGranted = permissionsGranted,
         permissions = permissions,
         sessionsList = sessionsList,

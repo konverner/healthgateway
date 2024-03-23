@@ -1,5 +1,6 @@
 package com.verner.healthgateway.presentation.screen.exercisesession
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,7 +31,18 @@ import java.util.UUID
  * Shows a list of [ExerciseSessionRecord]s from today.
  */
 @Composable
+fun mapExerciseType(exerciseType: Int): String {
+  return when (exerciseType) {
+    56 -> stringResource(R.string.exercise_type_running)
+    79 -> stringResource(R.string.exercise_type_walking)
+    8 -> stringResource(R.string.exercise_type_biking)
+    else -> "Unknown exercise"
+  }
+}
+
+@Composable
 fun ExerciseSessionScreen(
+  context: Context,
   permissions: Set<String>,
   permissionsGranted: Boolean,
   sessionsList: List<ExerciseSessionRecord>,
@@ -126,48 +138,12 @@ fun ExerciseSessionScreen(
           ZonedDateTime.ofInstant(session.startTime, session.startZoneOffset),
           ZonedDateTime.ofInstant(session.endTime, session.endZoneOffset),
           session.metadata.id,
-          session.title ?: stringResource(R.string.no_title),
+          mapExerciseType(session.exerciseType),
           onDetailsClick = { uid ->
             onDetailsClick(uid)
           }
         )
       }
     }
-  }
-}
-
-@Preview
-@Composable
-fun ExerciseSessionScreenPreview() {
-  HealthConnectTheme {
-    val runningStartTime = ZonedDateTime.now()
-    val runningEndTime = runningStartTime.plusMinutes(30)
-    val walkingStartTime = ZonedDateTime.now().minusMinutes(120)
-    val walkingEndTime = walkingStartTime.plusMinutes(30)
-    ExerciseSessionScreen(
-      permissions = setOf(),
-      permissionsGranted = true,
-      sessionsList = listOf(
-        ExerciseSessionRecord(
-          exerciseType = ExerciseSessionRecord.EXERCISE_TYPE_RUNNING,
-          title = "Running",
-          startTime = runningStartTime.toInstant(),
-          startZoneOffset = runningStartTime.offset,
-          endTime = runningEndTime.toInstant(),
-          endZoneOffset = runningEndTime.offset,
-          metadata = Metadata(UUID.randomUUID().toString())
-        ),
-        ExerciseSessionRecord(
-          exerciseType = ExerciseSessionRecord.EXERCISE_TYPE_WALKING,
-          title = "Walking",
-          startTime = walkingStartTime.toInstant(),
-          startZoneOffset = walkingStartTime.offset,
-          endTime = walkingEndTime.toInstant(),
-          endZoneOffset = walkingEndTime.offset,
-          metadata = Metadata(UUID.randomUUID().toString())
-        )
-      ),
-      uiState = ExerciseSessionViewModel.UiState.Done
-    )
   }
 }

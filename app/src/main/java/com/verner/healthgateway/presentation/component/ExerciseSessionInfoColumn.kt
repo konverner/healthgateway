@@ -21,7 +21,7 @@ fun ExerciseSessionInfoColumn(
     start: ZonedDateTime,
     end: ZonedDateTime,
     uid: String,
-    name: String,
+    type: String,
     onClick: (String) -> Unit = {},
 ) {
   Column(
@@ -29,6 +29,7 @@ fun ExerciseSessionInfoColumn(
       onClick(uid)
     }
   ) {
+    Text(type)
     Text(
       color = MaterialTheme.colors.primary,
       text = "${start.toLocalDate()}",
@@ -39,7 +40,6 @@ fun ExerciseSessionInfoColumn(
       text = "${start.toLocalTime()} - ${end.toLocalTime()}",
       style = MaterialTheme.typography.caption
     )
-    Text(name)
     Text(uid)
   }
 }

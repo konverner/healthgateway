@@ -23,7 +23,7 @@ fun ExerciseSessionRow(
   start: ZonedDateTime,
   end: ZonedDateTime,
   uid: String,
-  name: String,
+  type: String,
   onDetailsClick: (String) -> Unit = {},
 ) {
   Row(
@@ -37,7 +37,7 @@ fun ExerciseSessionRow(
       start = start.truncatedTo(ChronoUnit.SECONDS),
       end = end.truncatedTo(ChronoUnit.SECONDS),
       uid = uid,
-      name = name,
+      type = type,
       onClick = onDetailsClick
     )
   }
