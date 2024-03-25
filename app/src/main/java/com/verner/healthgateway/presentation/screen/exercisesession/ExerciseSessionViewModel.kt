@@ -17,6 +17,7 @@ import androidx.health.connect.client.records.TotalCaloriesBurnedRecord
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.verner.healthgateway.data.ExerciseSessionData
 import com.verner.healthgateway.data.HealthConnectManager
 import io.appwrite.Client
 import io.appwrite.ID
@@ -59,6 +60,8 @@ class ExerciseSessionViewModel(
   var sessionsList: MutableState<List<ExerciseSessionRecord>> = mutableStateOf(listOf())
     private set
 
+  var sessionsMetrics: MutableState<Map<String, ExerciseSessionData>> = mutableStateOf(emptyMap())
+    private set
   var uiState: UiState by mutableStateOf(UiState.Uninitialized)
     private set
 
@@ -82,12 +85,22 @@ class ExerciseSessionViewModel(
   fun readExerciseSessions() {
     viewModelScope.launch {
       tryWithPermissionsCheck {
-        val startOfDay = ZonedDateTime.now().minusYears(4)
+        val startOfDay = ZonedDateTime.now().minusYears(5)
         val now = ZonedDateTime.now()
         sessionsList.value = healthConnectManager.readExerciseSessions(
           startOfDay.toInstant(), now.toInstant()
         )
-        val countRecordsImported = sessionsList.value.count()
+
+        // Read associated metrics for each record
+        for (session in sessionsList.value) {
+          val sessionMetrics = healthConnectManager.readAssociatedSessionData(session.metadata.id)
+
+          // Add sessionMetrics as value to sessionsMap with key session.metadata.id
+          val updatedSessionsMap = sessionsMetrics.value.toMutableMap()
+          updatedSessionsMap[session.metadata.id] = sessionMetrics
+          sessionsMetrics.value = updatedSessionsMap
+
+        }
 
         // Get earliest session which is date of initial app install - 30 days
         // see: https://developer.android.com/health-and-fitness/guides/health-connect/develop/read-data#read-restriction
@@ -102,10 +115,10 @@ class ExerciseSessionViewModel(
         calendar.add(Calendar.DAY_OF_MONTH, -30)
 
         val earliestSessionDate = calendar.time
-
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val earliestSessionDateFormatted = dateFormat.format(earliestSessionDate)
 
+        val countRecordsImported = sessionsList.value.count()
         Toast.makeText(
           context,
           "$countRecordsImported new records imported starting from $earliestSessionDateFormatted",
@@ -120,15 +133,22 @@ class ExerciseSessionViewModel(
       val sessions = sessionsList.value
       var countRecordsExported = 0
       try {
-        val fileName = SimpleDateFormat(
-          "yyyyMMddHHmmss",
-          Locale.getDefault()
-        ).format(Date()) + "_exercise_sessions.csv"
-        val directory = File("/storage/emulated/0/Download", "Health Connect Data")
+        val directory = File(
+          "/storage/emulated/0/Download/Health Connect Data",
+          "exercise sessions"
+        )
+
         if (!directory.exists()) {
           directory.mkdirs()
         }
-        val file = File(directory, fileName)
+
+        val file = File(
+                directory,
+                SimpleDateFormat(
+                  "yyyy-MM-dd-HH-mm-ss",
+                  Locale.getDefault()
+                ).format(Date()) + ".csv"
+        )
         val writer = FileWriter(file)
 
         // Writing CSV header
@@ -136,12 +156,17 @@ class ExerciseSessionViewModel(
 
         // Writing session data
         for (session in sessions) {
-          val sessionMetrics = healthConnectManager.readAssociatedSessionData(session.metadata.id)
 
-          val distMatch = Regex("""(\d+(\.\d+)?)""").find(sessionMetrics.totalDistance.toString())
+          val sessionMetrics = sessionsMetrics.value[session.metadata.id]
+
+          val distMatch = Regex("""(\d+(\.\d+)?)""").find(
+            sessionMetrics?.totalDistance.toString()
+          )
           val floatDistValue = distMatch?.value?.toFloatOrNull() ?: 0.0f
 
-          val energyMatch = Regex("""(\d+(\.\d+)?)""").find(sessionMetrics.totalEnergyBurned.toString())
+          val energyMatch = Regex("""(\d+(\.\d+)?)""").find(
+            sessionMetrics?.totalEnergyBurned.toString()
+          )
           val floatEnergyValue = energyMatch?.value?.toFloatOrNull() ?: 0.0f
 
           if (floatEnergyValue > 1) {
@@ -151,7 +176,7 @@ class ExerciseSessionViewModel(
                       "${session.endTime}," +
                       "${session.exerciseType}," +
                       "${floatDistValue}," +
-                      "${floatEnergyValue},"
+                      "${floatEnergyValue}\n"
               //                    "${sessionMetrics.minSpeed}," +
               //                    "${sessionMetrics.maxSpeed}," +
               //                    "${sessionMetrics.avgSpeed}"
@@ -167,6 +192,11 @@ class ExerciseSessionViewModel(
         ).show()
       } catch (e: Exception) {
         e.printStackTrace()
+        Toast.makeText(
+          context,
+          "Error while exporting",
+          Toast.LENGTH_LONG
+        ).show()
       }
     }
   }
