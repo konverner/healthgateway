@@ -72,7 +72,7 @@ class HealthConnectManager(private val context: Context) {
   }
 
   /**
-   * TODO: Reads in existing [WeightRecord]s.
+   * Reads in existing [WeightRecord]s.
    */
   suspend fun readWeightInputs(start: Instant, end: Instant): List<WeightRecord> {
     val request = ReadRecordsRequest(
@@ -84,15 +84,17 @@ class HealthConnectManager(private val context: Context) {
   }
 
   /**
-   * TODO: Obtains a list of [ExerciseSessionRecord]s in a specified time frame. An Exercise Session Record is a
+   * Obtains a list of [ExerciseSessionRecord]s in a specified time frame. An Exercise Session Record is a
    * period of time given to an activity, that would make sense to a user, e.g. "Afternoon run"
    * etc. It does not necessarily mean, however, that the user was *running* for that entire time,
    * more that conceptually, this was the activity being undertaken.
    */
   suspend fun readExerciseSessions(start: Instant, end: Instant): List<ExerciseSessionRecord> {
+    println("$start, $end")
     val request = ReadRecordsRequest(
       recordType = ExerciseSessionRecord::class,
-      timeRangeFilter = TimeRangeFilter.between(start, end)
+      timeRangeFilter = TimeRangeFilter.between(start, end),
+      ascendingOrder = false
     )
     val response = healthConnectClient.readRecords(request)
     return response.records
@@ -100,7 +102,7 @@ class HealthConnectManager(private val context: Context) {
 
 
   /**
-   * TODO: Reads aggregated data and raw data for selected data types, for a given [ExerciseSessionRecord].
+   * Reads aggregated data and raw data for selected data types, for a given [ExerciseSessionRecord].
    */
   suspend fun readAssociatedSessionData(
       uid: String,
