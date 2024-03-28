@@ -74,10 +74,11 @@ class HealthConnectManager(private val context: Context) {
   /**
    * Reads in existing [WeightRecord]s.
    */
-  suspend fun readWeightInputs(start: Instant, end: Instant): List<WeightRecord> {
+  suspend fun readWeightRecords(start: Instant, end: Instant): List<WeightRecord> {
     val request = ReadRecordsRequest(
       recordType = WeightRecord::class,
-      timeRangeFilter = TimeRangeFilter.between(start, end)
+      timeRangeFilter = TimeRangeFilter.between(start, end),
+      ascendingOrder = false
     )
     val response = healthConnectClient.readRecords(request)
     return response.records

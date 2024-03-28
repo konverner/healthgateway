@@ -16,6 +16,7 @@ enum class Screen(val route: String, val titleId: Int, val hasMenuItem: Boolean 
   WelcomeScreen("welcome_screen", R.string.welcome_screen, false),
   ExerciseSessions("exercise_sessions", R.string.exercise_sessions),
   ExerciseSessionDetail("exercise_session_detail", R.string.exercise_session_detail, false),
+  WeightRecords("weight_records", R.string.weight_records),
   DifferentialChanges("differential_changes", R.string.differential_changes),
   PrivacyPolicy("privacy_policy", R.string.privacy_policy, false)
 }
