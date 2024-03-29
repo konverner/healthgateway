@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.verner.healthgateway.data.ExerciseSessionData
 import com.verner.healthgateway.data.HealthConnectManager
+import com.verner.healthgateway.presentation.DOWNLOAD_DIR
 import io.appwrite.Client
 import io.appwrite.ID
 import io.appwrite.models.Collection
@@ -132,21 +133,25 @@ class ExerciseSessionViewModel(
       val sessions = sessionsList.value
       var countRecordsExported = 0
       try {
-        val directory = File(
-          "/storage/emulated/0/Download/Health Connect Data",
+        val fullDownloadDirectory = File(
+          "/storage/emulated/0",
+          DOWNLOAD_DIR
+        )
+        val exerciseDirectory = File(
+          fullDownloadDirectory,
           "exercise sessions"
         )
 
-        if (!directory.exists()) {
-          directory.mkdirs()
+        if (!exerciseDirectory.exists()) {
+          exerciseDirectory.mkdirs()
         }
 
         val file = File(
-                directory,
-                SimpleDateFormat(
-                  "yyyy-MM-dd-HH-mm-ss",
-                  Locale.getDefault()
-                ).format(Date()) + ".csv"
+          exerciseDirectory,
+          SimpleDateFormat(
+            "yyyy-MM-dd-HH-mm-ss",
+            Locale.getDefault()
+          ).format(Date()) + ".csv"
         )
         val writer = FileWriter(file)
 
@@ -186,7 +191,7 @@ class ExerciseSessionViewModel(
         writer.close()
         Toast.makeText(
           context,
-          "$countRecordsExported records have been exported to ${file.path}",
+          "$countRecordsExported records have been exported to $DOWNLOAD_DIR",
           Toast.LENGTH_LONG
         ).show()
       } catch (e: Exception) {

@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.verner.healthgateway.data.HealthConnectManager
+import com.verner.healthgateway.presentation.DOWNLOAD_DIR
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileWriter
@@ -99,23 +100,27 @@ class WeightRecordViewModel(
   fun exportCsvWeightRecords() {
     viewModelScope.launch {
       val records = recordsList.value
-      var countRecordsExported = 0
+      var countRecordsExported = records.count()
       try {
-        val directory = File(
-          "/storage/emulated/0/Download/Health Connect Data",
+        val fullDownloadDirectory = File(
+          "/storage/emulated/0",
+          DOWNLOAD_DIR
+        )
+        val weightDirectory = File(
+          fullDownloadDirectory,
           "weight records"
         )
 
-        if (!directory.exists()) {
-          directory.mkdirs()
+        if (!weightDirectory.exists()) {
+          weightDirectory.mkdirs()
         }
 
         val file = File(
-                directory,
-                SimpleDateFormat(
-                  "yyyy-MM-dd-HH-mm-ss",
-                  Locale.getDefault()
-                ).format(Date()) + ".csv"
+          weightDirectory,
+          SimpleDateFormat(
+            "yyyy-MM-dd-HH-mm-ss",
+            Locale.getDefault()
+          ).format(Date()) + ".csv"
         )
         val writer = FileWriter(file)
 
@@ -128,13 +133,12 @@ class WeightRecordViewModel(
           writer.append(
             "${record.metadata.id},${record.time},${record.weight.inKilograms}\n"
           )
-          countRecordsExported++
 
         }
         writer.close()
         Toast.makeText(
           context,
-          "$countRecordsExported records have been exported to ${file.path}",
+          "$countRecordsExported records have been exported to $DOWNLOAD_DIR",
           Toast.LENGTH_LONG
         ).show()
       } catch (e: Exception) {
