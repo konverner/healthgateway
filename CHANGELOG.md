@@ -1,4 +1,10 @@
-Initial release 0.0.1
+Version 0.2.0
+
+- Add import sleep sessions and weight records from Health Connect
+- Add export sleep sessions and weight records to csv file
+- Small improvements in UX/UI
+
+Initial release 0.1.0
 
 - Add import exercise sessions from Health Connect
 - Add export exercise sessions to csv file
