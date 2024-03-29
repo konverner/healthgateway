@@ -27,7 +27,8 @@ import com.verner.healthgateway.presentation.navigation.Screen
 import com.verner.healthgateway.presentation.theme.HealthConnectTheme
 import kotlinx.coroutines.launch
 
-const val TAG = "Health Connect Codelab"
+const val TAG = "Health Gateway"
+const val DOWNLOAD_DIR = "Download/Health Gateway Data"
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -48,6 +49,7 @@ fun HealthConnectApp(context: Context, healthConnectManager: HealthConnectManage
           title = {
             val titleId = when (currentRoute) {
               Screen.ExerciseSessions.route -> Screen.ExerciseSessions.titleId
+              Screen.WeightRecords.route -> Screen.WeightRecords.titleId
               Screen.DifferentialChanges.route -> Screen.DifferentialChanges.titleId
               else -> R.string.app_name
             }

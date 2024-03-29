@@ -1,4 +1,4 @@
-package com.verner.healthgateway.presentation.screen.exercisesession
+package com.verner.healthgateway.presentation.screen.weightrecords
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
@@ -18,36 +18,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.health.connect.client.records.ExerciseSessionRecord
+import androidx.health.connect.client.records.WeightRecord
+import androidx.health.connect.client.units.Mass
 import com.verner.healthgateway.R
-import com.verner.healthgateway.presentation.component.ExerciseSessionRow
+import com.verner.healthgateway.presentation.component.WeightRecordRow
 import java.time.ZonedDateTime
 import java.util.UUID
 
-/**
- * Shows a list of [ExerciseSessionRecord]s from today.
- */
-@Composable
-fun mapExerciseType(exerciseType: Int): String {
-  return when (exerciseType) {
-    56 -> stringResource(R.string.exercise_type_running)
-    79 -> stringResource(R.string.exercise_type_walking)
-    8 -> stringResource(R.string.exercise_type_biking)
-    else -> "Unknown exercise"
-  }
-}
 
 @Composable
-fun ExerciseSessionScreen(
+fun WeightRecordScreen(
   context: Context,
   permissions: Set<String>,
   permissionsGranted: Boolean,
-  sessionsList: List<ExerciseSessionRecord>,
-  uiState: ExerciseSessionViewModel.UiState,
+  recordsList: List<WeightRecord>,
+  uiState: WeightRecordViewModel.UiState,
   onImportClick: () -> Unit = {},
   onExportCsvClick: () -> Unit = {},
-  onExportDbClick: () -> Unit = {},
-  onDetailsClick: (String) -> Unit = {},
+  //onExportDbClick: () -> Unit = {},
   onError: (Throwable?) -> Unit = {},
   onPermissionsResult: () -> Unit = {},
   onPermissionsLaunch: (Set<String>) -> Unit = {},
@@ -59,7 +47,7 @@ fun ExerciseSessionScreen(
 
   LaunchedEffect(uiState) {
     // If the initial data load has not taken place, attempt to load the data.
-    if (uiState is ExerciseSessionViewModel.UiState.Uninitialized) {
+    if (uiState is WeightRecordViewModel.UiState.Uninitialized) {
       onPermissionsResult()
     }
 
@@ -67,13 +55,13 @@ fun ExerciseSessionScreen(
     // success or resulted in an error. Where an error occurred, for example in reading and
     // writing to Health Connect, the user is notified, and where the error is one that can be
     // recovered from, an attempt to do so is made.
-    if (uiState is ExerciseSessionViewModel.UiState.Error && errorId.value != uiState.uuid) {
+    if (uiState is WeightRecordViewModel.UiState.Error && errorId.value != uiState.uuid) {
       onError(uiState.exception)
       errorId.value = uiState.uuid
     }
   }
 
-  if (uiState != ExerciseSessionViewModel.UiState.Uninitialized) {
+  if (uiState != WeightRecordViewModel.UiState.Uninitialized) {
     LazyColumn(
       modifier = Modifier.fillMaxSize(),
       verticalArrangement = Arrangement.Top,
@@ -100,7 +88,7 @@ fun ExerciseSessionScreen(
               onImportClick()
             }
           ) {
-            Text(stringResource(id = R.string.import_exercise_session))
+            Text(stringResource(id = R.string.import_records))
           }
         }
         item {
@@ -113,7 +101,7 @@ fun ExerciseSessionScreen(
               onExportCsvClick()
             }
           ) {
-            Text(stringResource(id = R.string.export_csv_exercise_session))
+            Text(stringResource(id = R.string.export_csv_records))
           }
         }
 //        item {
@@ -130,15 +118,11 @@ fun ExerciseSessionScreen(
 //          }
 //        }
       }
-      items(sessionsList) { session ->
-        ExerciseSessionRow(
-          ZonedDateTime.ofInstant(session.startTime, session.startZoneOffset),
-          ZonedDateTime.ofInstant(session.endTime, session.endZoneOffset),
-          session.metadata.id,
-          mapExerciseType(session.exerciseType),
-          onDetailsClick = { uid ->
-            onDetailsClick(uid)
-          }
+      items(recordsList) { record ->
+        WeightRecordRow(
+          ZonedDateTime.ofInstant(record.time, record.zoneOffset),
+          record.metadata.id,
+          Mass.kilograms(record.weight.inKilograms)
         )
       }
     }

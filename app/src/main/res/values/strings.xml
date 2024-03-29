@@ -7,6 +7,7 @@
   <string name="welcome_screen">Welcome screen</string>
   <string name="exercise_sessions">Exercise sessions</string>
   <string name="exercise_session_detail">Exercise session detail</string>
+  <string name="weight_records">Weight records</string>
   <string name="sleep_sessions">Sleep sessions</string>
   <string name="sleep_session_detail">Sleep session detail</string>
   <string name="differential_changes">Changes</string>
@@ -81,6 +82,11 @@
   <string name="avg_label">Avg</string>
   <string name="label_and_value">%1$s: %2$s</string>
 
+  <!-- Weight Records screen -->
+  <string name="import_records">Import records</string>
+  <string name="export_csv_records">Export records to CSV</string>
+  <string name="export_db_records">Export records to database</string>
+
   <!-- Sleep Session screen -->
   <string name="generate_sleep_data">Generate sleep data</string>
   <string-array name="sleep_notes_array">
@@ -128,4 +134,6 @@
 
   <!-- Health Connect settings -->
   <string name="settings">Settings</string>
+  <string name="import_sleep_sessions">Import sessions</string>
+  <string name="export_csv_sleep_sessions">Export sessions to CSV</string>
 </resources>

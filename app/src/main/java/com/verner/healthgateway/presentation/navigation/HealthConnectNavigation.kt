@@ -23,6 +23,12 @@ import com.verner.healthgateway.presentation.screen.exercisesessiondetail.Exerci
 import com.verner.healthgateway.presentation.screen.exercisesessiondetail.ExerciseSessionDetailViewModel
 import com.verner.healthgateway.presentation.screen.exercisesessiondetail.ExerciseSessionDetailViewModelFactory
 import com.verner.healthgateway.presentation.screen.privacypolicy.PrivacyPolicyScreen
+import com.verner.healthgateway.presentation.screen.sleepsession.SleepSessionScreen
+import com.verner.healthgateway.presentation.screen.sleepsession.SleepSessionViewModel
+import com.verner.healthgateway.presentation.screen.sleepsession.SleepSessionViewModelFactory
+import com.verner.healthgateway.presentation.screen.weightrecords.WeightRecordScreen
+import com.verner.healthgateway.presentation.screen.weightrecords.WeightRecordViewModel
+import com.verner.healthgateway.presentation.screen.weightrecords.WeightRecordViewModelFactory
 import com.verner.healthgateway.showExceptionSnackbar
 
 /**
@@ -122,6 +128,85 @@ fun HealthConnectNavigation(
         permissionsGranted = permissionsGranted,
         sessionMetrics = sessionMetrics,
         uiState = viewModel.uiState,
+        onError = { exception ->
+          showExceptionSnackbar(scaffoldState, scope, exception)
+        },
+        onPermissionsResult = {
+          viewModel.initialLoad()
+        },
+        onPermissionsLaunch = { values ->
+          permissionsLauncher.launch(values)
+        }
+      )
+    }
+    composable(Screen.SleepSessions.route) {
+      val viewModel: SleepSessionViewModel = viewModel(
+        factory = SleepSessionViewModelFactory(
+          context = context,
+          healthConnectManager = healthConnectManager
+        )
+      )
+      val permissionsGranted by viewModel.permissionsGranted
+      val sessionsList by viewModel.sessionsList
+      val permissions = viewModel.permissions
+      val onPermissionsResult = {viewModel.initialLoad()}
+      val permissionsLauncher =
+        rememberLauncherForActivityResult(viewModel.permissionsLauncher) {
+          onPermissionsResult()}
+      SleepSessionScreen(
+        permissionsGranted = permissionsGranted,
+        permissions = permissions,
+        sessionsList = sessionsList,
+        uiState = viewModel.uiState,
+        onImportClick = {
+          viewModel.importSleepSessions()
+        },
+        onExportCsvClick = {
+          viewModel.exportCsvSleepSessions()
+        },
+//        onExportDbClick = {
+//          viewModel.exportDbWeightRecords()
+//        },
+        onError = { exception ->
+          showExceptionSnackbar(scaffoldState, scope, exception)
+        },
+        onPermissionsResult = {
+          viewModel.initialLoad()
+        },
+        onPermissionsLaunch = { values ->
+          permissionsLauncher.launch(values)}
+      )
+    }
+    composable(Screen.WeightRecords.route) {
+      val viewModel: WeightRecordViewModel = viewModel(
+        factory = WeightRecordViewModelFactory(
+          context = context,
+          healthConnectManager = healthConnectManager
+        )
+      )
+      val permissionsGranted by viewModel.permissionsGranted
+      val recordsList by viewModel.recordsList
+      val permissions = viewModel.permissions
+      val onPermissionsResult = { viewModel.initialLoad() }
+      val permissionsLauncher =
+        rememberLauncherForActivityResult(viewModel.permissionsLauncher) {
+          onPermissionsResult()
+        }
+      WeightRecordScreen(
+        context = context,
+        permissionsGranted = permissionsGranted,
+        permissions = permissions,
+        recordsList = recordsList,
+        uiState = viewModel.uiState,
+        onImportClick = {
+          viewModel.insertWeightRecords()
+        },
+        onExportCsvClick = {
+          viewModel.exportCsvWeightRecords()
+        },
+//        onExportDbClick = {
+//          viewModel.exportDbWeightRecords()
+//        },
         onError = { exception ->
           showExceptionSnackbar(scaffoldState, scope, exception)
         },
