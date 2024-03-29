@@ -15,6 +15,7 @@ import androidx.health.connect.client.records.Record
 import androidx.health.connect.client.records.StepsRecord
 import androidx.health.connect.client.records.TotalCaloriesBurnedRecord
 import androidx.health.connect.client.records.DistanceRecord
+import androidx.health.connect.client.records.SleepSessionRecord
 import androidx.health.connect.client.records.SpeedRecord
 import androidx.health.connect.client.records.WeightRecord
 import androidx.health.connect.client.records.metadata.DataOrigin
@@ -32,6 +33,7 @@ import java.time.ZonedDateTime
 import kotlin.random.Random
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.time.temporal.ChronoUnit
 
 // The minimum android level that can use Health Connect
 const val MIN_SUPPORTED_SDK = Build.VERSION_CODES.O_MR1
@@ -82,6 +84,49 @@ class HealthConnectManager(private val context: Context) {
     )
     val response = healthConnectClient.readRecords(request)
     return response.records
+  }
+
+  /**
+   * Reads sleep sessions for the previous seven days (from yesterday) to show a week's worth of
+   * sleep data.
+   *
+   * In addition to reading [SleepSessionRecord]s, for each session, the duration is calculated to
+   * demonstrate aggregation, and the underlying [SleepSessionRecord.Stage] data is also read.
+   */
+  suspend fun readSleepSessions(
+    startTime: Instant,
+    endTime: Instant
+  ): List<SleepSessionData> {
+
+    val sessions = mutableListOf<SleepSessionData>()
+    val sleepSessionRequest = ReadRecordsRequest(
+      recordType = SleepSessionRecord::class,
+      timeRangeFilter = TimeRangeFilter.between(startTime, endTime),
+      ascendingOrder = false
+    )
+    val sleepSessions = healthConnectClient.readRecords(sleepSessionRequest)
+    sleepSessions.records.forEach { session ->
+      val sessionTimeFilter = TimeRangeFilter.between(session.startTime, session.endTime)
+      val durationAggregateRequest = AggregateRequest(
+        metrics = setOf(SleepSessionRecord.SLEEP_DURATION_TOTAL),
+        timeRangeFilter = sessionTimeFilter
+      )
+      val aggregateResponse = healthConnectClient.aggregate(durationAggregateRequest)
+      sessions.add(
+        SleepSessionData(
+          uid = session.metadata.id,
+          title = session.title,
+          notes = session.notes,
+          startTime = session.startTime,
+          startZoneOffset = session.startZoneOffset,
+          endTime = session.endTime,
+          endZoneOffset = session.endZoneOffset,
+          duration = aggregateResponse[SleepSessionRecord.SLEEP_DURATION_TOTAL],
+          stages = session.stages
+        )
+      )
+    }
+    return sessions
   }
 
   /**

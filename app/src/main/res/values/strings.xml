@@ -134,4 +134,6 @@
 
   <!-- Health Connect settings -->
   <string name="settings">Settings</string>
+  <string name="import_sleep_sessions">Import sessions</string>
+  <string name="export_csv_sleep_sessions">Export sessions to CSV</string>
 </resources>
