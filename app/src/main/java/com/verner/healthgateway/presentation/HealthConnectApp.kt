@@ -28,6 +28,7 @@ import com.verner.healthgateway.presentation.theme.HealthConnectTheme
 import kotlinx.coroutines.launch
 
 const val TAG = "Health Gateway"
+const val DOWNLOAD_DIR = "Download/Health Gateway Data"
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
