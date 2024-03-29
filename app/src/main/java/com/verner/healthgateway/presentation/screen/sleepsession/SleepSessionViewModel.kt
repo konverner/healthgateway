@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.verner.healthgateway.data.HealthConnectManager
 import com.verner.healthgateway.data.SleepSessionData
+import com.verner.healthgateway.presentation.DOWNLOAD_DIR
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileWriter
@@ -122,18 +123,23 @@ class SleepSessionViewModel(
         viewModelScope.launch {
             val sessions = sessionsList.value
             val countRecordsExported = sessions.count()
+
             try {
-                val directory = File(
-                    "/storage/emulated/0/Download/Health Connect Data",
+                val fullDownloadDirectory = File(
+                    "/storage/emulated/0",
+                    DOWNLOAD_DIR
+                )
+                val sleepDirectory = File(
+                    fullDownloadDirectory,
                     "sleep sessions"
                 )
 
-                if (!directory.exists()) {
-                    directory.mkdirs()
+                if (!sleepDirectory.exists()) {
+                    sleepDirectory.mkdirs()
                 }
 
                 val file = File(
-                    directory,
+                    sleepDirectory,
                     SimpleDateFormat(
                         "yyyy-MM-dd-HH-mm-ss",
                         Locale.getDefault()
@@ -150,7 +156,7 @@ class SleepSessionViewModel(
                         "${session.uid}," +
                         "${session.startTime}," +
                         "${session.endTime}," +
-                        "${session.duration}," +
+                        "${session.duration?.toMinutes()}," +
                         "${session.title}," +
                         "${session.notes}\n"
                     )
@@ -158,7 +164,7 @@ class SleepSessionViewModel(
                 writer.close()
                 Toast.makeText(
                     context,
-                    "$countRecordsExported records have been exported to ${file.path}",
+                    "$countRecordsExported records have been exported to $DOWNLOAD_DIR",
                     Toast.LENGTH_LONG
                 ).show()
             } catch (e: Exception) {
