@@ -1,4 +1,4 @@
-package com.verner.healthgateway.presentation.component
+package com.verner.healthgateway.presentation.component.utils
 
 import android.content.Intent
 import android.net.Uri

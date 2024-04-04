@@ -1,4 +1,4 @@
-package com.verner.healthgateway.presentation.component
+package com.verner.healthgateway.presentation.component.exercisesession
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

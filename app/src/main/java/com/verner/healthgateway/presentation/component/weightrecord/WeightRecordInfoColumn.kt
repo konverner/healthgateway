@@ -1,5 +1,6 @@
-package com.verner.healthgateway.presentation.component
+package com.verner.healthgateway.presentation.component.weightrecord
 
+import androidx.health.connect.client.units.Mass
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.MaterialTheme
@@ -17,27 +18,21 @@ import java.util.UUID
  */
 
 @Composable
-fun ExerciseSessionInfoColumn(
-    start: ZonedDateTime,
-    end: ZonedDateTime,
+fun WeightRecordInfoColumn(
+    time: ZonedDateTime,
     uid: String,
-    type: String,
-    onClick: (String) -> Unit = {},
+    weight: Mass,
+    onClick: (String) -> Unit = {}
 ) {
   Column(
     modifier = Modifier.clickable {
       onClick(uid)
     }
   ) {
-    Text(type)
+    Text(weight.toString())
     Text(
       color = MaterialTheme.colors.primary,
-      text = "${start.toLocalDate()}",
-      style = MaterialTheme.typography.caption
-    )
-    Text(
-      color = MaterialTheme.colors.primary,
-      text = "${start.toLocalTime()} - ${end.toLocalTime()}",
+      text = "${time.toLocalDate()}",
       style = MaterialTheme.typography.caption
     )
     Text(uid)
@@ -46,13 +41,12 @@ fun ExerciseSessionInfoColumn(
 
 @Preview
 @Composable
-fun ExerciseSessionInfoColumnPreview() {
+fun WeightRecordInfoColumnPreview() {
   HealthConnectTheme {
-    ExerciseSessionInfoColumn(
-      ZonedDateTime.now().minusMinutes(30),
+    WeightRecordInfoColumn(
       ZonedDateTime.now(),
       UUID.randomUUID().toString(),
-      "Running"
+      Mass.kilograms(51.055)
     )
   }
 }

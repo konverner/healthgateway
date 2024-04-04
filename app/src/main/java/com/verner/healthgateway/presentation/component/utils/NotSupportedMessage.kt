@@ -1,4 +1,4 @@
-package com.verner.healthgateway.presentation.component
+package com.verner.healthgateway.presentation.component.utils
 
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.MaterialTheme

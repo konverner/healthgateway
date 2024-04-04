@@ -1,4 +1,4 @@
-package com.verner.healthgateway.presentation.component
+package com.verner.healthgateway.presentation.component.utils
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement

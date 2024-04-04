@@ -1,4 +1,4 @@
-package com.verner.healthgateway.presentation.component
+package com.verner.healthgateway.presentation.component.utils
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

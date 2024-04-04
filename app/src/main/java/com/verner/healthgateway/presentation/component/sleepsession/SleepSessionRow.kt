@@ -1,4 +1,4 @@
-package com.verner.healthgateway.presentation.component
+package com.verner.healthgateway.presentation.component.sleepsession
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package com.verner.healthgateway.presentation.component
+package com.verner.healthgateway.presentation.component.weightrecord
 
 import androidx.health.connect.client.units.Mass
 import androidx.compose.foundation.layout.Arrangement
