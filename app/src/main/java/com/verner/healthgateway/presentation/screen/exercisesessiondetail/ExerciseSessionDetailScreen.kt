@@ -22,9 +22,10 @@ import androidx.health.connect.client.units.Velocity
 import com.verner.healthgateway.R
 import com.verner.healthgateway.data.ExerciseSessionData
 import com.verner.healthgateway.data.formatTime
-import com.verner.healthgateway.presentation.component.ExerciseSessionDetailsMinMaxAvg
-import com.verner.healthgateway.presentation.component.heartRateSeries
-import com.verner.healthgateway.presentation.component.sessionDetailsItem
+import com.verner.healthgateway.presentation.component.exercisesession.ExerciseSessionDetailsMinMaxAvg
+import com.verner.healthgateway.presentation.component.exercisesession.sessionDetailsItem
+import com.verner.healthgateway.presentation.component.utils.heartRateSeries
+import com.verner.healthgateway.presentation.component.utils.speedSeries
 import com.verner.healthgateway.presentation.theme.HealthConnectTheme
 import java.time.Duration
 import java.time.ZonedDateTime
@@ -92,6 +93,27 @@ fun ExerciseSessionDetailScreen(
         sessionDetailsItem(labelId = R.string.total_energy) {
           Text(sessionMetrics.totalEnergyBurned?.inKilocalories.toString())
         }
+        sessionDetailsItem(labelId = R.string.speed_stats) {
+          ExerciseSessionDetailsMinMaxAvg(
+            sessionMetrics.minSpeed?.inMetersPerSecond.let {
+              String.format(
+                "%.1f",
+                it
+              )
+            },
+            sessionMetrics.maxSpeed?.inMetersPerSecond.let {
+              String.format(
+                "%.1f",
+                it
+              )
+            },
+            sessionMetrics.avgSpeed?.inMetersPerSecond.let { String.format("%.1f", it) }
+          )
+        }
+        speedSeries(
+          labelId = R.string.speed_series,
+          series = sessionMetrics.speedRecord
+        )
         sessionDetailsItem(labelId = R.string.hr_stats) {
           ExerciseSessionDetailsMinMaxAvg(
             sessionMetrics.minHeartRate?.toString()
@@ -125,6 +147,9 @@ fun ExerciseSessionScreenPreview() {
       maxHeartRate = 103,
       avgHeartRate = 77,
       heartRateSeries = generateHeartRateSeries(),
+      minSpeed = Velocity.metersPerSecond(2.5),
+      maxSpeed = Velocity.metersPerSecond(3.1),
+      avgSpeed = Velocity.metersPerSecond(2.8),
       speedRecord = generateSpeedData(),
     )
 
