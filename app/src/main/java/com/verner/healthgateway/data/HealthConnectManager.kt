@@ -2,38 +2,31 @@ package com.verner.healthgateway.data
 
 import android.content.Context
 import android.os.Build
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.runtime.mutableStateOf
 import androidx.health.connect.client.HealthConnectClient
 import androidx.health.connect.client.HealthConnectClient.Companion.SDK_AVAILABLE
 import androidx.health.connect.client.PermissionController
 import androidx.health.connect.client.changes.Change
+import androidx.health.connect.client.records.DistanceRecord
 import androidx.health.connect.client.records.ExerciseSessionRecord
 import androidx.health.connect.client.records.HeartRateRecord
+import androidx.health.connect.client.records.NutritionRecord
 import androidx.health.connect.client.records.Record
-import androidx.health.connect.client.records.StepsRecord
-import androidx.health.connect.client.records.TotalCaloriesBurnedRecord
-import androidx.health.connect.client.records.DistanceRecord
 import androidx.health.connect.client.records.SleepSessionRecord
 import androidx.health.connect.client.records.SpeedRecord
+import androidx.health.connect.client.records.StepsRecord
+import androidx.health.connect.client.records.TotalCaloriesBurnedRecord
 import androidx.health.connect.client.records.WeightRecord
 import androidx.health.connect.client.records.metadata.DataOrigin
 import androidx.health.connect.client.request.AggregateRequest
 import androidx.health.connect.client.request.ChangesTokenRequest
 import androidx.health.connect.client.request.ReadRecordsRequest
 import androidx.health.connect.client.time.TimeRangeFilter
-import androidx.health.connect.client.units.Energy
-import androidx.health.connect.client.units.Length
-import androidx.health.connect.client.units.Mass
-import androidx.health.connect.client.units.Velocity
-import java.io.IOException
-import java.time.Instant
-import java.time.ZonedDateTime
-import kotlin.random.Random
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.time.temporal.ChronoUnit
+import java.io.IOException
+import java.time.Instant
 
 // The minimum android level that can use Health Connect
 const val MIN_SUPPORTED_SDK = Build.VERSION_CODES.O_MR1
@@ -85,6 +78,20 @@ class HealthConnectManager(private val context: Context) {
     val response = healthConnectClient.readRecords(request)
     return response.records
   }
+
+  /**
+    * Reads in existing [NutritionRecord]s.
+   */
+  suspend fun readNutritionRecords(start: Instant, end: Instant): List<NutritionRecord> {
+    val request = ReadRecordsRequest(
+      recordType = NutritionRecord::class,
+      timeRangeFilter = TimeRangeFilter.between(start, end),
+      ascendingOrder = false
+    )
+    val response = healthConnectClient.readRecords(request)
+    return response.records
+  }
+
 
   /**
    * Reads sleep sessions for the previous seven days (from yesterday) to show a week's worth of
@@ -146,6 +153,23 @@ class HealthConnectManager(private val context: Context) {
     return response.records
   }
 
+  suspend fun readAssociatedRecordData(
+    uid: String,
+  ): NutritionRecordData {
+    val nutritionRecord = healthConnectClient.readRecord(NutritionRecord::class, uid)
+
+    return NutritionRecordData(
+      uid = uid,
+        mealType = nutritionRecord.record.mealType,
+        energy = nutritionRecord.record.energy,
+        totalCarbohydrate = nutritionRecord.record.totalCarbohydrate,
+        protein = nutritionRecord.record.protein,
+        totalFat = nutritionRecord.record.totalFat,
+        title = nutritionRecord.record.name,
+        time = nutritionRecord.record.startTime,
+        notes = nutritionRecord.record.name
+    )
+  }
 
   /**
    * Reads aggregated data and raw data for selected data types, for a given [ExerciseSessionRecord].
@@ -190,14 +214,14 @@ class HealthConnectManager(private val context: Context) {
       totalSteps = aggregateData[StepsRecord.COUNT_TOTAL],
       totalDistance = aggregateData[DistanceRecord.DISTANCE_TOTAL],
       totalEnergyBurned = aggregateData[TotalCaloriesBurnedRecord.ENERGY_TOTAL],
-      minHeartRate = aggregateData[HeartRateRecord.BPM_MIN],
-      maxHeartRate = aggregateData[HeartRateRecord.BPM_MAX],
-      avgHeartRate = aggregateData[HeartRateRecord.BPM_AVG],
+//      minHeartRate = aggregateData[HeartRateRecord.BPM_MIN],
+//      maxHeartRate = aggregateData[HeartRateRecord.BPM_MAX],
+//      avgHeartRate = aggregateData[HeartRateRecord.BPM_AVG],
       heartRateSeries = heartRateData,
       speedRecord = speedData,
-//      minSpeed = aggregateData[SpeedRecord.SPEED_MIN],
-//      maxSpeed = aggregateData[SpeedRecord.SPEED_MAX],
-//      avgSpeed = aggregateData[SpeedRecord.SPEED_AVG],
+      minSpeed = aggregateData[SpeedRecord.SPEED_MIN],
+      maxSpeed = aggregateData[SpeedRecord.SPEED_MAX],
+      avgSpeed = aggregateData[SpeedRecord.SPEED_AVG],
     )
   }
 

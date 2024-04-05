@@ -1,3 +1,10 @@
+Version 0.3.0
+
+- Add import nutrition records from Health Connect
+- Add export nutrition records to csv file
+- Update icon app
+- Small improvements in UX/UI
+
 Version 0.2.0
 
 - Add import sleep sessions and weight records from Health Connect

@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.health.connect.client.records.SleepSessionRecord
 import com.verner.healthgateway.R
 import com.verner.healthgateway.data.SleepSessionData
-import com.verner.healthgateway.presentation.component.SleepSessionRow
+import com.verner.healthgateway.presentation.component.sleepsession.SleepSessionRow
 import com.verner.healthgateway.presentation.theme.HealthConnectTheme
 import java.time.Duration
 import java.time.ZonedDateTime

@@ -156,7 +156,7 @@ class ExerciseSessionViewModel(
         val writer = FileWriter(file)
 
         // Writing CSV header
-        writer.append("uid,startTime,endTime,exerciseType,totalDistance,totalEnergy\n")
+        writer.append("uid,startTime,endTime,exerciseType,totalDistance,totalEnergy,minSpeed,maxSpeed,avgSpeed\n")
 
         // Writing session data
         for (session in sessions) {
@@ -180,10 +180,10 @@ class ExerciseSessionViewModel(
                       "${session.endTime}," +
                       "${session.exerciseType}," +
                       "${floatDistValue}," +
-                      "${floatEnergyValue}\n"
-              //                    "${sessionMetrics.minSpeed}," +
-              //                    "${sessionMetrics.maxSpeed}," +
-              //                    "${sessionMetrics.avgSpeed}"
+                      "${floatEnergyValue}" +
+                      "${sessionMetrics?.minSpeed}," +
+                      "${sessionMetrics?.maxSpeed}," +
+                      "${sessionMetrics?.avgSpeed}\n"
             )
             countRecordsExported++
           }

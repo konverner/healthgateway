@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.health.connect.client.records.ExerciseSessionRecord
 import com.verner.healthgateway.R
-import com.verner.healthgateway.presentation.component.ExerciseSessionRow
+import com.verner.healthgateway.presentation.component.exercisesession.ExerciseSessionRow
 import java.time.ZonedDateTime
 import java.util.UUID
 
