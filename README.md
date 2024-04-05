@@ -1,6 +1,6 @@
 # Health Gateway
 
-A gateway to data stored in Health Connect. It allows to transmit the data to local files (excel, csv) or to remote database.
+A gateway to data stored in Health Connect. It allows to transmit the data to local files (excel, csv) or to a database.
 
 # Get Started
 
@@ -16,14 +16,17 @@ Indicate your project and database name.
 
 Exercise data includes records about such activities as Walking, Running and Cycling. Each record contains the following information:
 
-| Name        | Description                                                  |
-|-------------|--------------------------------------------------------------|
-| `uid`       | Unique identifier for the exercise session                   |
-| `startTime` | Start time of the exercise session                           |
-| `endTime`   | End time of the exercise session                             |
-| `duration`  | Type or category of the exercise                             |
-| `title`     | Total distance covered during the exercise session in meters |
-| `notes`     | Total energy expended during the exercise session  in kcal   |
+| Name            | Description                                                  |
+|-----------------|--------------------------------------------------------------|
+| `uid`           | Unique identifier for the exercise record                    |
+| `startTime`     | Start time of the exercise session                           |
+| `endTime`       | End time of the exercise session                             |
+| `duration`      | Type or category of the exercise                             |
+| `totalDistance` | Total distance covered during the exercise session in meters |
+| `totalEnergy`   | Total energy expended during the exercise session  in kcal   |
+| `minSpeed`      | Minimum speed over the session                               |
+| `maxSpeed`      | Maximum speed over the session                               |
+| `avgSpeed`      | Average speed over the session                               |
 
 ### Sleep Sessions
 
@@ -46,4 +49,15 @@ Exercise data includes records about such activities as Walking, Running and Cyc
 
 ### Nutrition Data
 
-todo
+| Column           | Description                                                                         |
+|------------------|-------------------------------------------------------------------------------------|
+| `uid`            | Unique identifier for the nutrition record                                          |
+| `time`           | Time instance of the nutrition record                                               |
+| `name`           | Name of the food                                                                    |
+| `protein`        | Protein content in grams                                                            |
+| `dietaryFiber`   | Dietary fiber content in grams                                                      |
+| `sugar`          | Sugar content in grams                                                              |
+| `totalCarbohydrate` | Total carbohydrate (sugars + starch + fiber) content in grams                       |
+| `totalFat`       | Total fat content in grams                                                          |
+| `energy`         | Energy provided by the food in kilocalories                                         |
+| `mealType`       | Type of meal (1 is breakfast, 2 is lunch, 3 is dinner, 4 is snack and 0 is unknown) |
