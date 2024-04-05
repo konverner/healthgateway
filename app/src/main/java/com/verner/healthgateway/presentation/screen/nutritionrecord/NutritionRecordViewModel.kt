@@ -125,7 +125,7 @@ class NutritionRecordViewModel(
         val writer = FileWriter(file)
 
         // Writing CSV header
-        writer.append("uid,time,name,protein,totalCarbohydrate,totalFat,energy,mealType\n")
+        writer.append("uid,time,name,protein,dietaryFiber,sugar,totalCarbohydrate,totalFat,energy,mealType\n")
 
         // Writing session data
         for (record in records) {
@@ -135,6 +135,8 @@ class NutritionRecordViewModel(
                 "${record.startTime}," +
                 "${record.name}," +
                 "${record.protein?.inGrams}," +
+                "${record.dietaryFiber?.inGrams}," +
+                "${record.sugar?.inGrams}," +
                 "${record.totalCarbohydrate?.inGrams}," +
                 "${record.totalFat?.inGrams}," +
                 "${record.energy?.inKilocalories}," +

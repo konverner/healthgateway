@@ -13,6 +13,8 @@ data class NutritionRecordData(
     val title: String? = null,
     val notes: String? = null,
     val protein: Mass? = null,
+    val dietaryFiber: Mass? = null,
+    val sugar: Mass? = null,
     val totalCarbohydrate: Mass? = null,
     val totalFat: Mass? = null,
     val energy: Energy? = null,
