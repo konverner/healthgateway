@@ -22,6 +22,12 @@ import com.verner.healthgateway.presentation.screen.exercisesession.ExerciseSess
 import com.verner.healthgateway.presentation.screen.exercisesessiondetail.ExerciseSessionDetailScreen
 import com.verner.healthgateway.presentation.screen.exercisesessiondetail.ExerciseSessionDetailViewModel
 import com.verner.healthgateway.presentation.screen.exercisesessiondetail.ExerciseSessionDetailViewModelFactory
+import com.verner.healthgateway.presentation.screen.nutritionrecord.NutritionRecordScreen
+import com.verner.healthgateway.presentation.screen.nutritionrecord.NutritionRecordViewModel
+import com.verner.healthgateway.presentation.screen.nutritionrecord.NutritionRecordViewModelFactory
+import com.verner.healthgateway.presentation.screen.nutritionrecorddetail.NutritionRecordDetailScreen
+import com.verner.healthgateway.presentation.screen.nutritionrecorddetail.NutritionRecordDetailViewModel
+import com.verner.healthgateway.presentation.screen.nutritionrecorddetail.NutritionRecordDetailViewModelFactory
 import com.verner.healthgateway.presentation.screen.privacypolicy.PrivacyPolicyScreen
 import com.verner.healthgateway.presentation.screen.sleepsession.SleepSessionScreen
 import com.verner.healthgateway.presentation.screen.sleepsession.SleepSessionViewModel
@@ -61,6 +67,83 @@ fun HealthConnectNavigation(
       )
     ) {
       PrivacyPolicyScreen()
+    }
+    composable(Screen.NutritionRecords.route) {
+      val viewModel: NutritionRecordViewModel = viewModel(
+        factory = NutritionRecordViewModelFactory(
+          context = context,
+          healthConnectManager = healthConnectManager
+        )
+      )
+      val permissionsGranted by viewModel.permissionsGranted
+      val recordsList by viewModel.recordsList
+      val permissions = viewModel.permissions
+      val onPermissionsResult = { viewModel.initialLoad() }
+      val permissionsLauncher =
+        rememberLauncherForActivityResult(viewModel.permissionsLauncher) {
+          onPermissionsResult()
+        }
+      NutritionRecordScreen(
+        //context = context,
+        permissionsGranted = permissionsGranted,
+        permissions = permissions,
+        recordsList = recordsList,
+        uiState = viewModel.uiState,
+        onImportClick = {
+          viewModel.insertNutritionRecord()
+        },
+        onExportCsvClick = {
+          viewModel.exportCsvNutritionRecords()
+        },
+        onExportDbClick = {
+          //viewModel.exportDbNutritionRecords()
+        },
+        onDetailsClick = { uid ->
+          navController.navigate(Screen.NutritionRecordDetail.route + "/" + uid)
+        },
+        onError = { exception ->
+          showExceptionSnackbar(scaffoldState, scope, exception)
+        },
+        onPermissionsResult = {
+          viewModel.initialLoad()
+        },
+        onPermissionsLaunch = { values ->
+          permissionsLauncher.launch(values)
+        }
+      )
+    }
+    composable(Screen.NutritionRecordDetail.route + "/{$UID_NAV_ARGUMENT}") {
+      val uid = it.arguments?.getString(UID_NAV_ARGUMENT)!!
+      println("UID: $uid")
+      val viewModel: NutritionRecordDetailViewModel = viewModel(
+        factory = NutritionRecordDetailViewModelFactory(
+          uid = uid,
+          healthConnectManager = healthConnectManager
+        )
+      )
+      val permissionsGranted by viewModel.permissionsGranted
+      val recordData by viewModel.recordData
+      val permissions = viewModel.permissions
+      val onPermissionsResult = { }
+      val permissionsLauncher =
+        rememberLauncherForActivityResult(viewModel.permissionsLauncher) {
+          onPermissionsResult()
+        }
+      NutritionRecordDetailScreen(
+        permissions = permissions,
+        nutritionRecord = recordData,
+        permissionsGranted = permissionsGranted,
+        uiState = viewModel.uiState,
+        onError = { exception ->
+          showExceptionSnackbar(scaffoldState, scope, exception)
+        },
+        onPermissionsResult = {
+          viewModel.initialLoad()
+        },
+        onPermissionsLaunch = { values ->
+          permissionsLauncher.launch(values)
+        }
+      )
     }
     composable(Screen.ExerciseSessions.route) {
       val viewModel: ExerciseSessionViewModel = viewModel(
