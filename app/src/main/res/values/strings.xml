@@ -72,7 +72,7 @@
   <string name="total_active_duration">Total active duration</string>
   <string name="total_steps">Total steps</string>
   <string name="total_distance">Total distance</string>
-  <string name="total_energy">Total kilocalories</string>
+  <string name="total_energy">Total energy</string>
   <string name="hr_stats">HR stats (bpm)</string>
   <string name="hr_series">HR series (bpm)</string>
   <string name="speed_stats">Speed stats (m/s)</string>
@@ -136,4 +136,16 @@
   <string name="settings">Settings</string>
   <string name="import_sleep_sessions">Import sessions</string>
   <string name="export_csv_sleep_sessions">Export sessions to CSV</string>
+    <string name="meal_type_dinner">Dinner</string>
+  <string name="meal_type_breakfast">Breakfast</string>
+  <string name="meal_type_lunch">Lunch</string>
+  <string name="meal_type_snack">Snack</string>
+  <string name="unknown">Unknown</string>
+    <string name="nutrition_record_screen">Nutrition Records</string>
+  <string name="meal">Meal</string>
+  <string name="carbs">Carbohydrates</string>
+  <string name="protein">Protein</string>
+  <string name="fat">Fat</string>
+  <string name="nutrition_record_detail">Nutrition Record Details</string>
+
 </resources>
