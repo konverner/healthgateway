@@ -26,9 +26,9 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import com.verner.healthgateway.R
 import com.verner.healthgateway.data.HealthConnectAvailability
-import com.verner.healthgateway.presentation.component.InstalledMessage
-import com.verner.healthgateway.presentation.component.NotInstalledMessage
-import com.verner.healthgateway.presentation.component.NotSupportedMessage
+import com.verner.healthgateway.presentation.component.utils.InstalledMessage
+import com.verner.healthgateway.presentation.component.utils.NotInstalledMessage
+import com.verner.healthgateway.presentation.component.utils.NotSupportedMessage
 import com.verner.healthgateway.presentation.theme.HealthConnectTheme
 
 /**

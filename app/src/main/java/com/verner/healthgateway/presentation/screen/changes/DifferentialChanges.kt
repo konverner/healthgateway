@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.health.connect.client.changes.Change
 import com.verner.healthgateway.R
-import com.verner.healthgateway.presentation.component.FormattedChange
+import com.verner.healthgateway.presentation.component.utils.FormattedChange
 import java.util.UUID
 
 /**

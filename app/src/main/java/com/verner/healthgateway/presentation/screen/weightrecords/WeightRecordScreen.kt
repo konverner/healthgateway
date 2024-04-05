@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.health.connect.client.records.WeightRecord
 import androidx.health.connect.client.units.Mass
 import com.verner.healthgateway.R
-import com.verner.healthgateway.presentation.component.WeightRecordRow
+import com.verner.healthgateway.presentation.component.weightrecord.WeightRecordRow
 import java.time.ZonedDateTime
 import java.util.UUID
 
