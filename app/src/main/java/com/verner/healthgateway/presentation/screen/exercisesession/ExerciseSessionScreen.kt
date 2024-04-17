@@ -1,6 +1,5 @@
 package com.verner.healthgateway.presentation.screen.exercisesession
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.health.connect.client.records.ExerciseSessionRecord
 import com.verner.healthgateway.R
+import com.verner.healthgateway.data.ExerciseSessionData
 import com.verner.healthgateway.presentation.component.exercisesession.ExerciseSessionRow
 import java.time.ZonedDateTime
 import java.util.UUID
@@ -39,10 +39,10 @@ fun mapExerciseType(exerciseType: Int): String {
 
 @Composable
 fun ExerciseSessionScreen(
-  context: Context,
   permissions: Set<String>,
   permissionsGranted: Boolean,
   sessionsList: List<ExerciseSessionRecord>,
+  sessionsMetrics: Map<String, ExerciseSessionData>,
   uiState: ExerciseSessionViewModel.UiState,
   onImportClick: () -> Unit = {},
   onExportCsvClick: () -> Unit = {},
@@ -134,10 +134,9 @@ fun ExerciseSessionScreen(
         ExerciseSessionRow(
           ZonedDateTime.ofInstant(session.startTime, session.startZoneOffset),
           ZonedDateTime.ofInstant(session.endTime, session.endZoneOffset),
-          session.metadata.id,
+          sessionsMetrics[session.metadata.id]?.totalEnergyBurned,
           mapExerciseType(session.exerciseType),
-          onDetailsClick = { uid ->
-            onDetailsClick(uid)
+          onDetailsClick = { onDetailsClick(session.metadata.id)
           }
         )
       }

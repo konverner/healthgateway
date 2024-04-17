@@ -8,9 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.health.connect.client.records.ExerciseSessionRecord
+import androidx.health.connect.client.units.Energy
 import com.verner.healthgateway.presentation.theme.HealthConnectTheme
 import java.time.ZonedDateTime
-import java.util.UUID
 
 /**
  * Displays summary information about the [ExerciseSessionRecord]
@@ -20,13 +20,13 @@ import java.util.UUID
 fun ExerciseSessionInfoColumn(
     start: ZonedDateTime,
     end: ZonedDateTime,
-    uid: String,
+    energy: Energy?,
     type: String,
     onClick: (String) -> Unit = {},
 ) {
   Column(
     modifier = Modifier.clickable {
-      onClick(uid)
+      onClick(type)
     }
   ) {
     Text(type)
@@ -35,12 +35,12 @@ fun ExerciseSessionInfoColumn(
       text = "${start.toLocalDate()}",
       style = MaterialTheme.typography.caption
     )
+    Text(energy.toString())
     Text(
       color = MaterialTheme.colors.primary,
       text = "${start.toLocalTime()} - ${end.toLocalTime()}",
       style = MaterialTheme.typography.caption
     )
-    Text(uid)
   }
 }
 
@@ -51,7 +51,7 @@ fun ExerciseSessionInfoColumnPreview() {
     ExerciseSessionInfoColumn(
       ZonedDateTime.now().minusMinutes(30),
       ZonedDateTime.now(),
-      UUID.randomUUID().toString(),
+      Energy.kilocalories(200.0),
       "Running"
     )
   }

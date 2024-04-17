@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.health.connect.client.records.ExerciseSessionRecord
+import androidx.health.connect.client.units.Energy
 import com.verner.healthgateway.presentation.theme.HealthConnectTheme
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
-import java.util.UUID
 
 /**
  * Creates a row to represent an [ExerciseSessionRecord]
@@ -22,7 +22,7 @@ import java.util.UUID
 fun ExerciseSessionRow(
   start: ZonedDateTime,
   end: ZonedDateTime,
-  uid: String,
+  energy: Energy?,
   type: String,
   onDetailsClick: (String) -> Unit = {},
 ) {
@@ -36,7 +36,7 @@ fun ExerciseSessionRow(
     ExerciseSessionInfoColumn(
       start = start.truncatedTo(ChronoUnit.SECONDS),
       end = end.truncatedTo(ChronoUnit.SECONDS),
-      uid = uid,
+      energy = energy,
       type = type,
       onClick = onDetailsClick
     )
@@ -50,7 +50,7 @@ fun ExerciseSessionRowPreview() {
     ExerciseSessionRow(
       ZonedDateTime.now().minusMinutes(30),
       ZonedDateTime.now(),
-      UUID.randomUUID().toString(),
+      Energy.kilocalories(200.0),
       "Running"
     )
   }
