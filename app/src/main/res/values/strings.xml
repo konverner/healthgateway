@@ -147,5 +147,6 @@
   <string name="protein">Protein</string>
   <string name="fat">Fat</string>
   <string name="nutrition_record_detail">Nutrition Record Details</string>
+    <string name="steps_record">Steps Records</string>
 
 </resources>
