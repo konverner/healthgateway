@@ -2,6 +2,8 @@ Version 0.3.0
 
 - Add import nutrition records from Health Connect
 - Add export nutrition records to csv file
+- Add import daily steps records from Health Connect
+- Add export daily steps records to csv file
 - Update icon app
 - Small improvements in UX/UI
 
