@@ -100,7 +100,7 @@ fun ExerciseSessionScreen(
               onImportClick()
             }
           ) {
-            Text(stringResource(id = R.string.import_exercise_session))
+            Text(stringResource(id = R.string.import_sessions))
           }
         }
         item {
@@ -113,7 +113,7 @@ fun ExerciseSessionScreen(
               onExportCsvClick()
             }
           ) {
-            Text(stringResource(id = R.string.export_csv_exercise_session))
+            Text(stringResource(id = R.string.export_csv_sessions))
           }
         }
 //        item {
