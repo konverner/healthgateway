@@ -10,18 +10,20 @@ Install apk file, enable demanded permissions. Data can be exported to csv files
 
 ### Nutrition Data
 
-| Column           | Description                                                                         |
-|------------------|-------------------------------------------------------------------------------------|
-| `uid`            | Unique identifier for the nutrition record                                          |
-| `time`           | Time instance of the nutrition record                                               |
-| `name`           | Name of the food                                                                    |
-| `protein`        | Protein content in grams                                                            |
-| `dietaryFiber`   | Dietary fiber content in grams                                                      |
-| `sugar`          | Sugar content in grams                                                              |
+| Column              | Description                                                                         |
+|---------------------|-------------------------------------------------------------------------------------|
+| `uid`               | Unique identifier for the nutrition record                                          |
+| `time`              | Time instance of the nutrition record                                               |
+| `name`              | Name of the food                                                                    |
+| `protein`           | Protein content in grams                                                            |
+| `dietaryFiber`      | Dietary fiber content in grams                                                      |
+| `sugar`             | Sugar content in grams                                                              |
 | `totalCarbohydrate` | Total carbohydrate (sugars + starch + fiber) content in grams                       |
-| `totalFat`       | Total fat content in grams                                                          |
-| `energy`         | Energy provided by the food in kilocalories                                         |
-| `mealType`       | Type of meal (1 is breakfast, 2 is lunch, 3 is dinner, 4 is snack and 0 is unknown) |
+| `saturatedFat`      | Saturated fat content in grams                                                      |
+| `unsaturatedFat`    | Unsaturated fat content in grams                                                    |
+| `totalFat`          | Total fat content in grams                                                          |
+| `energy`            | Energy provided by the food in kilocalories                                         |
+| `mealType`          | Type of meal (1 is breakfast, 2 is lunch, 3 is dinner, 4 is snack and 0 is unknown) |
 
 
 ### Daily Steps Records
