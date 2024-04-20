@@ -1,4 +1,4 @@
-package com.verner.healthgateway.presentation.screen.nutritionrecord
+package com.verner.healthgateway.presentation.screen.stepsrecords
 
 import android.content.Context
 import android.os.RemoteException
@@ -8,12 +8,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.health.connect.client.permission.HealthPermission
-import androidx.health.connect.client.records.NutritionRecord
+import androidx.health.connect.client.records.StepsRecord
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.verner.healthgateway.R
 import com.verner.healthgateway.data.HealthConnectManager
+import com.verner.healthgateway.data.StepsRecordData
 import com.verner.healthgateway.presentation.DOWNLOAD_DIR
 import kotlinx.coroutines.launch
 import java.io.File
@@ -27,20 +28,20 @@ import java.util.Locale
 import java.util.UUID
 
 
-class NutritionRecordViewModel(
+class StepsRecordViewModel(
   private val context: Context,
   private val healthConnectManager: HealthConnectManager
   ) :
   ViewModel() {
   val permissions = setOf(
-    HealthPermission.getWritePermission(NutritionRecord::class),
-    HealthPermission.getReadPermission(NutritionRecord::class)
+    HealthPermission.getWritePermission(StepsRecord::class),
+    HealthPermission.getReadPermission(StepsRecord::class),
   )
 
   var permissionsGranted = mutableStateOf(false)
     private set
 
-  var recordsList: MutableState<List<NutritionRecord>> = mutableStateOf(listOf())
+  var recordsList: MutableState<List<StepsRecordData>> = mutableStateOf(listOf())
     private set
 
   var uiState: UiState by mutableStateOf(UiState.Uninitialized)
@@ -55,24 +56,24 @@ class NutritionRecordViewModel(
     }
   }
 
-  fun insertNutritionRecord() {
+  fun insertStepsRecords() {
     viewModelScope.launch {
       tryWithPermissionsCheck {
-        readNutritionRecords()
+        readStepsRecords()
       }
     }
   }
 
-  fun readNutritionRecords() {
+  fun readStepsRecords() {
     viewModelScope.launch {
       tryWithPermissionsCheck {
         val startOfDay = ZonedDateTime.now().minusYears(5)
         val now = ZonedDateTime.now()
-        recordsList.value = healthConnectManager.readNutritionRecords(
+        recordsList.value = healthConnectManager.readDailyStepsRecords(
           startOfDay.toInstant(), now.toInstant()
         )
 
-        // Get earliest session which is date of initial app install - 30 days
+        // Get earliest record which is date of initial app install minus 30 days
         // see: https://developer.android.com/health-and-fitness/guides/health-connect/develop/read-data#read-restriction
         val firstInstallTime: Long = context
           .packageManager
@@ -84,40 +85,40 @@ class NutritionRecordViewModel(
         calendar.time = firstInstallDate
         calendar.add(Calendar.DAY_OF_MONTH, -30)
 
-        val earliestSessionDate = calendar.time
+        val earliestRecordDate = calendar.time
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val earliestSessionDateFormatted = dateFormat.format(earliestSessionDate)
+        val earliestRecordDateFormatted = dateFormat.format(earliestRecordDate)
 
         val countRecordsImported = recordsList.value.count()
         Toast.makeText(
           context,
-          "$countRecordsImported new records imported starting from $earliestSessionDateFormatted",
+          "$countRecordsImported new records imported starting from $earliestRecordDateFormatted",
           Toast.LENGTH_LONG
         ).show()
       }
     }
   }
 
-  fun exportCsvNutritionRecords() {
+  fun exportCsvStepsRecords() {
     viewModelScope.launch {
       val records = recordsList.value
-      var countRecordsExported = records.count()
+      val countRecordsExported = records.count()
       try {
         val fullDownloadDirectory = File(
           "/storage/emulated/0",
           DOWNLOAD_DIR
         )
-        val exerciseDirectory = File(
+        val stepsDirectory = File(
           fullDownloadDirectory,
-          "nutrition records"
+          "steps records"
         )
 
-        if (!exerciseDirectory.exists()) {
-          exerciseDirectory.mkdirs()
+        if (!stepsDirectory.exists()) {
+          stepsDirectory.mkdirs()
         }
 
         val file = File(
-          exerciseDirectory,
+          stepsDirectory,
           SimpleDateFormat(
             "yyyy-MM-dd-HH-mm-ss",
             Locale.getDefault()
@@ -126,25 +127,14 @@ class NutritionRecordViewModel(
         val writer = FileWriter(file)
 
         // Writing CSV header
-        writer.append(R.string.csv_header.toString() + "\n")
+        writer.append(R.string.steps_csv_header.toString() + "\n")
 
-        // Writing session data
+        // Writing record data
         for (record in records) {
 
-            writer.append(
-              "${record.metadata.id}," +
-                "${record.startTime}," +
-                "${record.name}," +
-                "${record.protein?.inGrams}," +
-                "${record.dietaryFiber?.inGrams}," +
-                "${record.sugar?.inGrams}," +
-                "${record.totalCarbohydrate?.inGrams}," +
-                "${record.saturatedFat?.inGrams}," +
-                "${record.unsaturatedFat?.inGrams}," +
-                "${record.totalFat?.inGrams}," +
-                "${record.energy?.inKilocalories}," +
-                "${record.mealType}\n"
-            )
+          writer.append(
+            "${record.uid},${record.startTime},${record.count}\n"
+          )
 
         }
         writer.close()
@@ -156,18 +146,13 @@ class NutritionRecordViewModel(
       } catch (e: Exception) {
         e.printStackTrace()
         Toast.makeText(
-          context, R.string.error_exporting,
+          context,
+          "Error exporting records",
           Toast.LENGTH_LONG
         ).show()
       }
     }
   }
-
-  fun exportDbNutritionRecords() {
-    viewModelScope.launch {
-      // TODO
-      }
-    }
 
   /**
    * Provides permission check and error handling for Health Connect suspend function calls.
@@ -207,14 +192,14 @@ class NutritionRecordViewModel(
   }
 }
 
-class NutritionRecordViewModelFactory(
+class StepsRecordViewModelFactory(
     private val context: Context,
     private val healthConnectManager: HealthConnectManager,
 ) : ViewModelProvider.Factory {
   override fun <T : ViewModel> create(modelClass: Class<T>): T {
-    if (modelClass.isAssignableFrom(NutritionRecordViewModel::class.java)) {
+    if (modelClass.isAssignableFrom(StepsRecordViewModel::class.java)) {
       @Suppress("UNCHECKED_CAST")
-      return NutritionRecordViewModel(
+      return StepsRecordViewModel(
         context = context,
         healthConnectManager = healthConnectManager
       ) as T

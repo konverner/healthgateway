@@ -5,7 +5,10 @@
 
   <!-- Screen titles -->
   <string name="welcome_screen">Welcome screen</string>
+  <string name="nutrition_record_screen">Nutrition Records</string>
+  <string name="nutrition_record_detail">Nutrition Record Details</string>
   <string name="exercise_sessions">Exercise sessions</string>
+  <string name="steps_record">Steps Records</string>
   <string name="exercise_session_detail">Exercise session detail</string>
   <string name="weight_records">Weight records</string>
   <string name="sleep_sessions">Sleep sessions</string>
@@ -19,12 +22,11 @@
   <string name="exercise_type_biking">Biking</string>
 
   <!-- Welcome screen -->
-  <string name="welcome_message">Welcome to Health Connect!</string>
+  <string name="welcome_message">Health Gateway</string>
   <string name="health_connect_logo">Health Connect logo</string>
   <string name="installed_welcome_message">
-        Health Connect is installed on this device. Use the menu to explore the sample, with each
-        screen demonstrating a different aspect of Health Connect functionality.
-    </string>
+        Health Connect is installed on this device. Use the menu to explore the data.
+  </string>
 
   <!-- Privacy policy screen -->
   <string name="privacy_policy">Privacy policy</string>
@@ -61,12 +63,31 @@
   <string name="permissions_button_label">Request permissions</string>
   <string name="not_available_abbrev">N/A</string>
 
+  <!-- Common buttons -->
+  <string name="import_records">Import records</string>
+  <string name="export_csv_records">Export records to CSV</string>
+  <string name="export_db_records">Export records to database</string>
+  <string name="import_sessions">Import sessions</string>
+  <string name="export_csv_sessions">Export sessions to CSV</string>
+  <string name="export_db_sessions">Export sessions to database</string>
+
+  <!-- Nutrition Record screen -->
+  <string name="meal_type_dinner">Dinner</string>
+  <string name="meal_type_breakfast">Breakfast</string>
+  <string name="meal_type_lunch">Lunch</string>
+  <string name="meal_type_snack">Snack</string>
+  <string name="unknown">Unknown</string>
+  <string name="meal">Meal</string>
+  <string name="dieteryFiber">Dietary fiber</string>
+  <string name="sugar">Sugar</string>
+  <string name="totalCarbs">Total carbohydrates</string>
+  <string name="protein">Protein</string>
+  <string name="unsaturatedFat">Unsaturated fat</string>
+  <string name="saturatedFat">Saturated fat</string>
+  <string name="fat">Total fat</string>
+
   <!-- Exercise Session screen -->
-  <string name="import_exercise_session">Import sessions</string>
-  <string name="export_csv_exercise_session">Export sessions to CSV</string>
-  <string name="export_db_exercise_session">Export sessions to database</string>
   <string name="no_title">[No title]</string>
-  <string name="delete_button">Delete</string>
 
   <!-- Exercise Session detail screen -->
   <string name="total_active_duration">Total active duration</string>
@@ -81,35 +102,6 @@
   <string name="max_label">Max</string>
   <string name="avg_label">Avg</string>
   <string name="label_and_value">%1$s: %2$s</string>
-
-  <!-- Weight Records screen -->
-  <string name="import_records">Import records</string>
-  <string name="export_csv_records">Export records to CSV</string>
-  <string name="export_db_records">Export records to database</string>
-
-  <!-- Sleep Session screen -->
-  <string name="generate_sleep_data">Generate sleep data</string>
-  <string-array name="sleep_notes_array">
-    <item>I slept great!</item>
-    <item>I got woken up</item>
-    <item>Struggled to sleep</item>
-    <item>Much needed sleep</item>
-    <item>Restful sleep</item>
-  </string-array>
-  <string name="sleep_notes">Notes:</string>
-  <string name="sleep_duration">Duration:</string>
-  <string name="sleep_time">Time:</string>
-  <string name="sleep_stages">Sleep stages:</string>
-
-  <!-- Input Readings detail screen -->
-  <string name="input_readings">Record weight</string>
-  <string name="delete_button_readings">Delete</string>
-  <string name="weight_input">New Record (Kg)</string>
-  <string name="add_readings_button">Add</string>
-  <string name="previous_readings"> Previous Measurements </string>
-  <string name="weekly_avg"> Weekly Average </string>
-  <string name="kilograms">Kg\u0020</string>
-  <string name="valid_weight_error_message"> Weight must be between 0 and 1000</string>
 
   <!-- Differential changes screen -->
   <string name="differential_changes_title_text">Enabling differential change tracking obtains a token that can be used later for obtaining any subsequent changes</string>
@@ -134,18 +126,14 @@
 
   <!-- Health Connect settings -->
   <string name="settings">Settings</string>
-  <string name="import_sleep_sessions">Import sessions</string>
-  <string name="export_csv_sleep_sessions">Export sessions to CSV</string>
-    <string name="meal_type_dinner">Dinner</string>
-  <string name="meal_type_breakfast">Breakfast</string>
-  <string name="meal_type_lunch">Lunch</string>
-  <string name="meal_type_snack">Snack</string>
-  <string name="unknown">Unknown</string>
-    <string name="nutrition_record_screen">Nutrition Records</string>
-  <string name="meal">Meal</string>
-  <string name="carbs">Carbohydrates</string>
-  <string name="protein">Protein</string>
-  <string name="fat">Fat</string>
-  <string name="nutrition_record_detail">Nutrition Record Details</string>
+  <string name="sleep_notes">Sleep notes</string>
+  <string name="delete_button">Delete</string>
+  <string name="sleep_time">Sleep time</string>
+  <string name="sleep_duration">Sleep duration</string>
+  <string name="csv_header">uid,time,name,protein,dietaryFiber,sugar,totalCarbohydrate,saturatedFat,unsaturatedFat,totalFat,energy,mealType</string>
+  <string name="error_exporting">Error while exporting</string>
+  <string name="exercise_csv_header">uid,startTime,endTime,exerciseType,totalDistance,totalEnergy,minSpeed,maxSpeed,avgSpeed</string>
+  <string name="steps_csv_header">uid,date,steps</string>
+  <string name="sleep_csv_header">uid,startTime,endTime,duration,title,notes</string>
 
 </resources>

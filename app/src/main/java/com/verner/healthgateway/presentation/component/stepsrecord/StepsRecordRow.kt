@@ -1,4 +1,4 @@
-package com.verner.healthgateway.presentation.component.weightrecord
+package com.verner.healthgateway.presentation.component.stepsrecord
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -9,18 +9,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.health.connect.client.units.Mass
+import androidx.health.connect.client.records.StepsRecord
 import com.verner.healthgateway.presentation.theme.HealthConnectTheme
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 /**
- * Creates a row to represent an [WeightRecord]
+ * Creates a row to represent an [StepsRecord]
  */
 @Composable
-fun WeightRecordRow(
+fun StepsRecordRow(
   time: ZonedDateTime,
-  weight: Mass,
+  steps: Long,
 ) {
   Row(
     modifier = Modifier
@@ -29,20 +29,20 @@ fun WeightRecordRow(
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
-    WeightRecordInfoColumn(
+    StepsRecordInfoColumn(
       time = time.truncatedTo(ChronoUnit.SECONDS),
-      weight = weight
+      steps = steps
     )
   }
 }
 
 @Preview
 @Composable
-fun WeightRecordRowPreview() {
+fun StepsRecordRowPreview() {
   HealthConnectTheme {
-    WeightRecordRow(
+    StepsRecordRow(
       ZonedDateTime.now(),
-      Mass.kilograms(51.0)
+      10001
     )
   }
 }

@@ -1,6 +1,5 @@
 package com.verner.healthgateway.presentation.screen.weightrecords
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,7 +27,6 @@ import java.util.UUID
 
 @Composable
 fun WeightRecordScreen(
-  context: Context,
   permissions: Set<String>,
   permissionsGranted: Boolean,
   recordsList: List<WeightRecord>,
@@ -121,7 +119,6 @@ fun WeightRecordScreen(
       items(recordsList) { record ->
         WeightRecordRow(
           ZonedDateTime.ofInstant(record.time, record.zoneOffset),
-          record.metadata.id,
           Mass.kilograms(record.weight.inKilograms)
         )
       }

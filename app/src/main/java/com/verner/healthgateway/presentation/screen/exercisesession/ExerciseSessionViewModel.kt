@@ -17,6 +17,7 @@ import androidx.health.connect.client.records.TotalCaloriesBurnedRecord
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.verner.healthgateway.R
 import com.verner.healthgateway.data.ExerciseSessionData
 import com.verner.healthgateway.data.HealthConnectManager
 import com.verner.healthgateway.presentation.DOWNLOAD_DIR
@@ -156,7 +157,7 @@ class ExerciseSessionViewModel(
         val writer = FileWriter(file)
 
         // Writing CSV header
-        writer.append("uid,startTime,endTime,exerciseType,totalDistance,totalEnergy,minSpeed,maxSpeed,avgSpeed\n")
+        writer.append(R.string.exercise_csv_header.toString() + "\n")
 
         // Writing session data
         for (session in sessions) {
@@ -198,7 +199,7 @@ class ExerciseSessionViewModel(
         e.printStackTrace()
         Toast.makeText(
           context,
-          "Error while exporting",
+          R.string.error_exporting,
           Toast.LENGTH_LONG
         ).show()
       }

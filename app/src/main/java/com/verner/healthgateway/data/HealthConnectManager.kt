@@ -67,6 +67,46 @@ class HealthConnectManager(private val context: Context) {
   }
 
   /**
+   * Reads in existing [StepsRecord]s.
+   */
+  suspend fun readDailyStepsRecords(startTime: Instant, endTime: Instant): List<StepsRecordData> {
+    val records = mutableListOf<StepsRecordData>()
+    val stepsRecordsRequest = ReadRecordsRequest(
+      recordType = StepsRecord::class,
+      timeRangeFilter = TimeRangeFilter.between(startTime, endTime),
+      ascendingOrder = false
+    )
+    val stepsRecords = healthConnectClient.readRecords(stepsRecordsRequest)
+    stepsRecords.records.forEach { record ->
+      records.add(
+        StepsRecordData(
+          uid = record.metadata.id,
+          startTime = record.startTime,
+          startZoneOffset = record.startZoneOffset,
+          endTime = record.endTime,
+          endZoneOffset = record.endZoneOffset,
+          count = record.count
+        )
+      )
+    }
+
+    // Group records by day and sum the counts
+    val recordsDaily = records.groupBy {
+      it.startTime.atZone(it.startZoneOffset).toLocalDate()
+    }.map { (date, recordsByDay) ->
+      StepsRecordData(
+        uid = "SummedDay-${date}",
+        startTime = recordsByDay.minOf { it.startTime }, // start time of the first record of the day
+        startZoneOffset = recordsByDay.first().startZoneOffset, // assuming all records in a day have the same zone offset
+        endTime = recordsByDay.maxOf { it.endTime }, // end time of the last record of the day
+        endZoneOffset = recordsByDay.last().endZoneOffset, // assuming all records in a day have the same zone offset
+        count = recordsByDay.sumOf { it.count }
+      )
+    }.toMutableList()
+
+    return recordsDaily
+  }
+  /**
    * Reads in existing [WeightRecord]s.
    */
   suspend fun readWeightRecords(start: Instant, end: Instant): List<WeightRecord> {
@@ -162,8 +202,13 @@ class HealthConnectManager(private val context: Context) {
       uid = uid,
         mealType = nutritionRecord.record.mealType,
         energy = nutritionRecord.record.energy,
+        dietaryFiber = nutritionRecord.record.dietaryFiber,
+        sugar = nutritionRecord.record.sugar,
         totalCarbohydrate = nutritionRecord.record.totalCarbohydrate,
         protein = nutritionRecord.record.protein,
+        unsaturatedFat = nutritionRecord.record.unsaturatedFat,
+        saturatedFat = nutritionRecord.record.saturatedFat,
+        cholesterol = nutritionRecord.record.cholesterol,
         totalFat = nutritionRecord.record.totalFat,
         title = nutritionRecord.record.name,
         time = nutritionRecord.record.startTime,

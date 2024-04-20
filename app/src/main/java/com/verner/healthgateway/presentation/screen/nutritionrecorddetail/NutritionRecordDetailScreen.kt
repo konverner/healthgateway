@@ -90,7 +90,26 @@ fun NutritionRecordDetailScreen(
           }
           Text(roundedEnergy + " kcal")
         }
-        sessionDetailsItem(labelId = R.string.carbs) {
+        sessionDetailsItem(labelId = R.string.dieteryFiber) {
+          val dietaryFiber = nutritionRecord.dietaryFiber?.inGrams
+          val roundedFiber = if (dietaryFiber != null) {
+            BigDecimal(dietaryFiber).setScale(1, RoundingMode.CEILING).toString()
+          } else {
+            "N/A" // Handle the case where totalCarbohydrate is null
+          }
+          Text(roundedFiber + " grams")
+        }
+        sessionDetailsItem(labelId = R.string.sugar) {
+          val sugar = nutritionRecord.sugar?.inGrams
+          val roundedSugar = if (sugar != null) {
+            BigDecimal(sugar).setScale(1, RoundingMode.CEILING).toString()
+          } else {
+            "N/A" // Handle the case where totalCarbohydrate is null
+          }
+          Text(roundedSugar + " grams")
+        }
+
+        sessionDetailsItem(labelId = R.string.totalCarbs) {
           val carbs = nutritionRecord.totalCarbohydrate?.inGrams
           val roundedCarbs = if (carbs != null) {
             BigDecimal(carbs).setScale(1, RoundingMode.CEILING).toString()
@@ -108,6 +127,26 @@ fun NutritionRecordDetailScreen(
             "N/A" // Handle the case where protein is null
           }
           Text(roundedProtein + " grams")
+        }
+
+        sessionDetailsItem(labelId = R.string.saturatedFat) {
+          val saturatedFat = nutritionRecord.saturatedFat?.inGrams
+          val roundedSaturatedFat = if (saturatedFat != null) {
+            BigDecimal(saturatedFat).setScale(1, RoundingMode.CEILING).toString()
+          } else {
+            "N/A" // Handle the case where totalFat is null
+          }
+          Text(roundedSaturatedFat + " grams")
+        }
+
+        sessionDetailsItem(labelId = R.string.unsaturatedFat) {
+          val unsaturatedFat = nutritionRecord.unsaturatedFat?.inGrams
+          val roundedUnsaturatedFat = if (unsaturatedFat != null) {
+            BigDecimal(unsaturatedFat).setScale(1, RoundingMode.CEILING).toString()
+          } else {
+            "N/A" // Handle the case where totalFat is null
+          }
+          Text(roundedUnsaturatedFat + " grams")
         }
 
         sessionDetailsItem(labelId = R.string.fat) {
@@ -132,14 +171,17 @@ fun NutritionRecordScreenPreview() {
     val uid = UUID.randomUUID().toString()
     val record = NutritionRecordData(
       uid = uid,
-      mealType = 1,
-      energy = Energy.kilocalories(Random.nextDouble(100.0, 1000.0)),
-      totalCarbohydrate = Mass.grams(Random.nextDouble(100.0, 1000.0)),
-      protein = Mass.grams(Random.nextDouble(100.0, 1000.0)),
-      totalFat = Mass.grams(Random.nextDouble(100.0, 1000.0)),
+      title = "Some title",
       notes = "Some notes",
+      protein = Mass.grams(Random.nextDouble(100.0, 1000.0)),
+      totalCarbohydrate = Mass.grams(Random.nextDouble(100.0, 1000.0)),
+      totalFat = Mass.grams(20.5),
+      energy = Energy.kilocalories(Random.nextDouble(100.0, 1000.0)),
       time = ZonedDateTime.now().toInstant(),
-      title = "Some title"
+      mealType = 1,
+      unsaturatedFat = Mass.grams(10.0),
+      saturatedFat = Mass.grams(10.5),
+      cholesterol = Mass.grams(2.5)
     )
 
     NutritionRecordDetailScreen(

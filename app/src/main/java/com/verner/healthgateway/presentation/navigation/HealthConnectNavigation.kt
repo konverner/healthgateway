@@ -32,6 +32,9 @@ import com.verner.healthgateway.presentation.screen.privacypolicy.PrivacyPolicyS
 import com.verner.healthgateway.presentation.screen.sleepsession.SleepSessionScreen
 import com.verner.healthgateway.presentation.screen.sleepsession.SleepSessionViewModel
 import com.verner.healthgateway.presentation.screen.sleepsession.SleepSessionViewModelFactory
+import com.verner.healthgateway.presentation.screen.stepsrecords.StepsRecordScreen
+import com.verner.healthgateway.presentation.screen.stepsrecords.StepsRecordViewModel
+import com.verner.healthgateway.presentation.screen.stepsrecords.StepsRecordViewModelFactory
 import com.verner.healthgateway.presentation.screen.weightrecords.WeightRecordScreen
 import com.verner.healthgateway.presentation.screen.weightrecords.WeightRecordViewModel
 import com.verner.healthgateway.presentation.screen.weightrecords.WeightRecordViewModelFactory
@@ -84,7 +87,6 @@ fun HealthConnectNavigation(
           onPermissionsResult()
         }
       NutritionRecordScreen(
-        //context = context,
         permissionsGranted = permissionsGranted,
         permissions = permissions,
         recordsList = recordsList,
@@ -145,6 +147,46 @@ fun HealthConnectNavigation(
         }
       )
     }
+    composable(Screen.StepsRecords.route) {
+      val viewModel: StepsRecordViewModel = viewModel(
+        factory = StepsRecordViewModelFactory(
+          context = context,
+          healthConnectManager = healthConnectManager
+        )
+      )
+      val permissionsGranted by viewModel.permissionsGranted
+      val recordsList by viewModel.recordsList
+      val permissions = viewModel.permissions
+      val onPermissionsResult = { viewModel.initialLoad() }
+      val permissionsLauncher =
+        rememberLauncherForActivityResult(viewModel.permissionsLauncher) {
+          onPermissionsResult()
+        }
+      StepsRecordScreen(
+        permissionsGranted = permissionsGranted,
+        permissions = permissions,
+        recordsList = recordsList,
+        uiState = viewModel.uiState,
+        onImportClick = {
+          viewModel.insertStepsRecords()
+        },
+        onExportCsvClick = {
+          viewModel.exportCsvStepsRecords()
+        },
+//        onExportDbClick = {
+//          viewModel.exportDbStepsRecords()
+//        },
+        onError = { exception ->
+          showExceptionSnackbar(scaffoldState, scope, exception)
+        },
+        onPermissionsResult = {
+          viewModel.initialLoad()
+        },
+        onPermissionsLaunch = { values ->
+          permissionsLauncher.launch(values)
+        }
+      )
+    }
     composable(Screen.ExerciseSessions.route) {
       val viewModel: ExerciseSessionViewModel = viewModel(
         factory = ExerciseSessionViewModelFactory(
@@ -154,6 +196,7 @@ fun HealthConnectNavigation(
       )
       val permissionsGranted by viewModel.permissionsGranted
       val sessionsList by viewModel.sessionsList
+      val sessionsMetrics by viewModel.sessionsMetrics
       val permissions = viewModel.permissions
       val onPermissionsResult = { viewModel.initialLoad() }
       val permissionsLauncher =
@@ -161,10 +204,10 @@ fun HealthConnectNavigation(
           onPermissionsResult()
         }
       ExerciseSessionScreen(
-        context = context,
         permissionsGranted = permissionsGranted,
         permissions = permissions,
         sessionsList = sessionsList,
+        sessionsMetrics = sessionsMetrics,
         uiState = viewModel.uiState,
         onImportClick = {
           viewModel.insertExerciseSession()
@@ -276,7 +319,6 @@ fun HealthConnectNavigation(
           onPermissionsResult()
         }
       WeightRecordScreen(
-        context = context,
         permissionsGranted = permissionsGranted,
         permissions = permissions,
         recordsList = recordsList,

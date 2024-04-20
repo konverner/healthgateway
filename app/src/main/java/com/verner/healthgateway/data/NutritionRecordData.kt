@@ -19,5 +19,8 @@ data class NutritionRecordData(
     val totalFat: Mass? = null,
     val energy: Energy? = null,
     val time: Instant? = null,
-    val mealType: Int? = null
+    val mealType: Int? = null,
+    val unsaturatedFat: Mass? = null,
+    val saturatedFat: Mass? = null,
+    val cholesterol: Mass? = null
 )

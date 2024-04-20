@@ -1,16 +1,38 @@
 # Health Gateway
 
-A gateway to data stored in Health Connect. It allows to transmit the data to local files (excel, csv) or to a database.
+A gateway to data stored in Health Connect. It allows to transmit the data to local csv files.
 
 # Get Started
 
 Install apk file, enable demanded permissions. Data can be exported to csv files in `Downloads/Health Gateway Data` directory or to database using Appwrite platform.
 
-## Set up Appwrite database
-
-Indicate your project and database name. 
-
 ## Avaliable Data
+
+### Nutrition Data
+
+| Column              | Description                                                                         |
+|---------------------|-------------------------------------------------------------------------------------|
+| `uid`               | Unique identifier for the nutrition record                                          |
+| `time`              | Time instance of the nutrition record                                               |
+| `name`              | Name of the food                                                                    |
+| `protein`           | Protein content in grams                                                            |
+| `dietaryFiber`      | Dietary fiber content in grams                                                      |
+| `sugar`             | Sugar content in grams                                                              |
+| `totalCarbohydrate` | Total carbohydrate (sugars + starch + fiber) content in grams                       |
+| `saturatedFat`      | Saturated fat content in grams                                                      |
+| `unsaturatedFat`    | Unsaturated fat content in grams                                                    |
+| `totalFat`          | Total fat content in grams                                                          |
+| `energy`            | Energy provided by the food in kilocalories                                         |
+| `mealType`          | Type of meal (1 is breakfast, 2 is lunch, 3 is dinner, 4 is snack and 0 is unknown) |
+
+
+### Daily Steps Records
+
+| Name    | Description                            |
+|---------|----------------------------------------|
+| `uid`   | Unique identifier for the steps record |
+| `date`  | Date of the steps record (up to day)   |
+| `steps` | Number of steps taken in the given day |
 
 ### Exercise Sessions
 
@@ -46,18 +68,3 @@ Exercise data includes records about such activities as Walking, Running and Cyc
 | `uid`    | Unique identifier for the weight record |
 | `time`   | Time instance of a weight record        |
 | `weight` | Weight value in kilograms               |
-
-### Nutrition Data
-
-| Column           | Description                                                                         |
-|------------------|-------------------------------------------------------------------------------------|
-| `uid`            | Unique identifier for the nutrition record                                          |
-| `time`           | Time instance of the nutrition record                                               |
-| `name`           | Name of the food                                                                    |
-| `protein`        | Protein content in grams                                                            |
-| `dietaryFiber`   | Dietary fiber content in grams                                                      |
-| `sugar`          | Sugar content in grams                                                              |
-| `totalCarbohydrate` | Total carbohydrate (sugars + starch + fiber) content in grams                       |
-| `totalFat`       | Total fat content in grams                                                          |
-| `energy`         | Energy provided by the food in kilocalories                                         |
-| `mealType`       | Type of meal (1 is breakfast, 2 is lunch, 3 is dinner, 4 is snack and 0 is unknown) |
