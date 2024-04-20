@@ -12,6 +12,7 @@ import androidx.health.connect.client.records.StepsRecord
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.verner.healthgateway.R
 import com.verner.healthgateway.data.HealthConnectManager
 import com.verner.healthgateway.data.StepsRecordData
 import com.verner.healthgateway.presentation.DOWNLOAD_DIR
@@ -126,7 +127,7 @@ class StepsRecordViewModel(
         val writer = FileWriter(file)
 
         // Writing CSV header
-        writer.append("uid,date,steps\n")
+        writer.append(R.string.steps_csv_header.toString() + "\n")
 
         // Writing record data
         for (record in records) {
@@ -146,7 +147,7 @@ class StepsRecordViewModel(
         e.printStackTrace()
         Toast.makeText(
           context,
-          "Error while exporting",
+          "Error exporting records",
           Toast.LENGTH_LONG
         ).show()
       }

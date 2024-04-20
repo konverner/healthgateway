@@ -91,10 +91,6 @@ fun SleepSessionRow(
             item = sessionData.duration?.formatHoursMinutes()
         )
         SleepSessionDetailRow(labelId = R.string.sleep_notes, item = sessionData.notes)
-        if (sessionData.stages.isNotEmpty()) {
-            SleepSessionDetailRow(labelId = R.string.sleep_stages, item = "")
-            SleepStagesDetail(sessionData.stages)
-        }
     }
 }
 

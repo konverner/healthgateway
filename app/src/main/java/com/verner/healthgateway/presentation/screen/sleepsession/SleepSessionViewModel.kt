@@ -12,6 +12,7 @@ import androidx.health.connect.client.records.SleepSessionRecord
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.verner.healthgateway.R
 import com.verner.healthgateway.data.HealthConnectManager
 import com.verner.healthgateway.data.SleepSessionData
 import com.verner.healthgateway.presentation.DOWNLOAD_DIR
@@ -148,7 +149,7 @@ class SleepSessionViewModel(
                 val writer = FileWriter(file)
 
                 // Writing CSV header
-                writer.append("uid,startTime,endTime,duration,title,notes\n")
+                writer.append(R.string.sleep_csv_header.toString() + "\n")
 
                 // Writing session data
                 for (session in sessions) {

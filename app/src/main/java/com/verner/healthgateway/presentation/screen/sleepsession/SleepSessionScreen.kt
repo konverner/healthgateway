@@ -88,7 +88,7 @@ fun SleepSessionScreen(
                             onImportClick()
                         }
                     ) {
-                        Text(stringResource(id = R.string.import_sleep_sessions))
+                        Text(stringResource(id = R.string.import_sessions))
                     }
                 }
                 item {
@@ -101,7 +101,7 @@ fun SleepSessionScreen(
                             onExportCsvClick()
                         }
                     ) {
-                        Text(stringResource(id = R.string.export_csv_sleep_sessions))
+                        Text(stringResource(id = R.string.export_csv_sessions))
                     }
                 }
                 items(sessionsList) { session ->
