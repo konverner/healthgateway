@@ -12,6 +12,7 @@ import androidx.health.connect.client.records.NutritionRecord
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.verner.healthgateway.R
 import com.verner.healthgateway.data.HealthConnectManager
 import com.verner.healthgateway.presentation.DOWNLOAD_DIR
 import kotlinx.coroutines.launch
@@ -125,7 +126,7 @@ class NutritionRecordViewModel(
         val writer = FileWriter(file)
 
         // Writing CSV header
-        writer.append("uid,time,name,protein,dietaryFiber,sugar,totalCarbohydrate,totalFat,energy,mealType\n")
+        writer.append(R.string.csv_header.toString() + "\n")
 
         // Writing session data
         for (record in records) {
@@ -138,6 +139,8 @@ class NutritionRecordViewModel(
                 "${record.dietaryFiber?.inGrams}," +
                 "${record.sugar?.inGrams}," +
                 "${record.totalCarbohydrate?.inGrams}," +
+                "${record.saturatedFat?.inGrams}," +
+                "${record.unsaturatedFat?.inGrams}," +
                 "${record.totalFat?.inGrams}," +
                 "${record.energy?.inKilocalories}," +
                 "${record.mealType}\n"
@@ -153,8 +156,7 @@ class NutritionRecordViewModel(
       } catch (e: Exception) {
         e.printStackTrace()
         Toast.makeText(
-          context,
-          "Error while exporting",
+          context, R.string.error_exporting,
           Toast.LENGTH_LONG
         ).show()
       }

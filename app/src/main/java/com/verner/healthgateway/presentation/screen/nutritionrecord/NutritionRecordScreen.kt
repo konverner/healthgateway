@@ -101,7 +101,7 @@ fun NutritionRecordScreen(
               onImportClick()
             }
           ) {
-            Text(stringResource(id = R.string.import_exercise_session))
+            Text(stringResource(id = R.string.import_records))
           }
         }
         item {
@@ -114,7 +114,7 @@ fun NutritionRecordScreen(
               onExportCsvClick()
             }
           ) {
-            Text(stringResource(id = R.string.export_csv_exercise_session))
+            Text(stringResource(id = R.string.export_csv_records))
           }
         }
 //        item {
