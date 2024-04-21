@@ -6,8 +6,6 @@ I hereby state, to the best of my knowledge and belief, that I have not programm
 
 The full list of required permissions can be found in the [AndroidManifest.xml](https://github.com/konverner/healthgateway/blob/main/app/src/main/AndroidManifest.xml)
 
-Sincerely,
-
-Konstantin VERNER
-
+Sincerely,<br>
+Konstantin VERNER<br>
 konst.verner@gmail.com
