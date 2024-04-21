@@ -2,11 +2,27 @@
 
 A gateway to data stored in Health Connect. It allows to transmit the data to local csv files.
 
-# Get Started
+<div align="center">
+    <img src="https://github.com/konverner/healthgateway/blob/main/assets/screenshot2.jpg?raw=true" alt="Image 1" width="200"/>
+    <img src="https://github.com/konverner/healthgateway/blob/main/assets/screenshot1.jpg?raw=true" alt="Image 2" width="200"/>
+</div>
 
-Install apk file, enable demanded permissions. Data can be exported to csv files in `Downloads/Health Gateway Data` directory or to database using Appwrite platform.
 
-## Avaliable Data
+## Get Started
+
+Install apk file, enable demanded permissions. Data can be exported to csv files in `Downloads/Health Gateway Data` directory.
+
+## TODOs
+
+The following features are planned:
+
+- Add gps data support for exercise sessions.
+- Add database support.
+- Add an easy way to deploy RESTful API.
+
+Adding local or remote databases are planned.
+
+## Avaliable Data Types
 
 ### Nutrition Data
 
